@@ -6,24 +6,19 @@
 
 Curated AI agent skills for **Vue 3 development in Cursor IDE**.
 
-Merged and deduplicated from the best open-source skill repositories:
-- [vuejs-ai/skills](https://github.com/vuejs-ai/skills) — workflow-oriented best practices with validated rules
-- [antfu/skills](https://github.com/antfu/skills) — generated from official Vue/Pinia docs, Anthony Fu's preferences
-- [vueuse/skills](https://github.com/vueuse/skills) — official VueUse composables reference
-
 ---
 
 ## Skills
 
-| Skill | Description | Sources |
-|-------|-------------|---------|
-| `vue-core` | Vue 3 Composition API, `<script setup>`, reactivity, SFC, data flow, composables, performance | vuejs-ai + antfu |
-| `vue-pinia` | Pinia setup stores, storeToRefs, actions, plugins, SSR, testing, gotchas | antfu + vuejs-ai |
-| `vue-router` | Vue Router 4 guards, navigation patterns, route lifecycle, gotchas | vuejs-ai |
-| `vue-testing` | Vitest + Vue Test Utils + Playwright E2E, async patterns, Pinia mocking | vuejs-ai |
-| `vueuse` | 200+ VueUse composable utilities with invocation rules | vueuse/skills |
-| `vue-composables` | Library-grade composables with `MaybeRef`/`MaybeRefOrGetter` patterns | vuejs-ai |
-| `vue-debug` | Runtime errors, warnings, hydration issues, SSR debugging guide | vuejs-ai |
+| Skill | Description |
+|-------|-------------|
+| `vue-core` | Vue 3 Composition API, `<script setup>`, reactivity, SFC, data flow, composables, performance |
+| `vue-pinia` | Pinia setup stores, storeToRefs, actions, plugins, SSR, testing, gotchas |
+| `vue-router` | Vue Router 4 guards, navigation patterns, route lifecycle, gotchas |
+| `vue-testing` | Vitest + Vue Test Utils + Playwright E2E, async patterns, Pinia mocking |
+| `vueuse` | 200+ VueUse composable utilities with invocation rules |
+| `vue-composables` | Library-grade composables with `MaybeRef`/`MaybeRefOrGetter` patterns |
+| `vue-debug` | Runtime errors, warnings, hydration issues, SSR debugging guide |
 
 ---
 
@@ -168,21 +163,6 @@ vue-cursor-skills/
     └── vue-debug/
         └── SKILL.md            # Debugging guide
 ```
-
----
-
-## Deduplication Strategy
-
-| Topic | Decision |
-|-------|----------|
-| `vue-best-practices` (vuejs-ai) vs `vue` (antfu) | **Merged** into `vue-core`: workflow/rules from vuejs-ai + API reference tables + shallowRef preference from antfu |
-| `vue-pinia-best-practices` (vuejs-ai) vs `pinia` (antfu) | **Merged** into `vue-pinia`: antfu's comprehensive structure (from official docs) + vuejs-ai's gotchas/patterns |
-| `vue-router-best-practices` — identical in both repos | **Single** `vue-router` skill |
-| `vue-testing-best-practices` — unique to vuejs-ai | **Kept** as `vue-testing` |
-| `vueuse-functions` — identical in vueuse/skills and antfu/skills | **Single** `vueuse` skill (from vueuse/skills) |
-| `create-adaptable-composable` — unique to vuejs-ai | **Kept** as `vue-composables` |
-| `vue-debug-guides` — unique to vuejs-ai | **Kept** as `vue-debug` |
-| `vue-options-api-best-practices` — legacy | **Excluded** (Composition API only per project rules) |
 
 ---
 
