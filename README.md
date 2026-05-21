@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/vue-cursor-skills)](https://www.npmjs.com/package/vue-cursor-skills)
 [![license](https://img.shields.io/npm/l/vue-cursor-skills)](./LICENSE)
+[![github](https://img.shields.io/badge/github-makshc2%2Fvue--3--AI--skills-blue)](https://github.com/makshc2/vue-3-AI-skills)
 
 Curated AI agent skills for **Vue 3 development in Cursor IDE**.
 
@@ -197,7 +198,7 @@ vue-cursor-skills/
 
 ## Contributing
 
-1. Fork this repository.
+1. Fork [makshc2/vue-3-AI-skills](https://github.com/makshc2/vue-3-AI-skills).
 2. Add or improve skills in `skills/<skill-name>/SKILL.md`.
 3. Follow the SKILL.md frontmatter format.
 4. Submit a PR.
