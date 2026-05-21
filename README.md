@@ -34,16 +34,24 @@ npx vue-cursor-skills install
 
 Copies all skills to `.cursor/skills/` in the current working directory.
 
-Install into a specific project:
+Install by category:
 
 ```bash
-npx vue-cursor-skills install --target /path/to/my-project
+npx vue-cursor-skills install --category vue
+npx vue-cursor-skills install --category typescript
+npx vue-cursor-skills install --category javascript
 ```
 
 Install specific skills only:
 
 ```bash
 npx vue-cursor-skills install --skill vue-core --skill vue-pinia
+```
+
+Install into a specific project:
+
+```bash
+npx vue-cursor-skills install --target /path/to/my-project
 ```
 
 ### Option 2: npm install as devDependency
@@ -139,29 +147,16 @@ vue-cursor-skills/
 ├── bin/
 │   └── install.js              # CLI installer
 └── skills/
-    ├── vue-core/
-    │   ├── SKILL.md            # Core Vue 3 best practices
-    │   └── references/
-    │       ├── reactivity.md
-    │       ├── sfc.md
-    │       ├── composables.md
-    │       ├── component-data-flow.md
-    │       ├── script-setup-macros.md
-    │       └── core-new-apis.md
-    ├── vue-pinia/
-    │   ├── SKILL.md            # Pinia state management
-    │   └── references/
-    │       └── core-stores.md
-    ├── vue-router/
-    │   └── SKILL.md            # Vue Router 4
-    ├── vue-testing/
-    │   └── SKILL.md            # Vitest + Vue Test Utils + Playwright
-    ├── vueuse/
-    │   └── SKILL.md            # 200+ VueUse composables
-    ├── vue-composables/
-    │   └── SKILL.md            # Adaptable composable patterns
-    └── vue-debug/
-        └── SKILL.md            # Debugging guide
+    ├── vue/                    # Vue 3 skills
+    │   ├── vue-core/
+    │   ├── vue-pinia/
+    │   ├── vue-router/
+    │   ├── vue-testing/
+    │   ├── vueuse/
+    │   ├── vue-composables/
+    │   └── vue-debug/
+    ├── javascript/             # JS skills (coming soon)
+    └── typescript/             # TS skills (coming soon)
 ```
 
 ---
