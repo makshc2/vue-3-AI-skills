@@ -1,7 +1,7 @@
 {
   "name": "vue-cursor-skills",
   "version": "1.0.0",
-  "description": "Curated AI agent skills for Vue 3 development in Cursor IDE. Merged from vuejs-ai/skills, antfu/skills, vueuse/skills.",
+  "description": "Curated AI agent skills for Vue 3 development in Cursor IDE.",
   "keywords": [
     "vue3",
     "cursor",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "vue-cursor-skills": "./bin/install.js"
+    "vue-cursor-skills": "bin/install.js"
   },
   "scripts": {
     "skills:install": "node bin/install.js install",
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/makshc2/vue-3-AI-skills.git"
+    "url": "git+https://github.com/makshc2/vue-3-AI-skills.git"
   },
   "bugs": {
     "url": "https://github.com/makshc2/vue-3-AI-skills/issues"
