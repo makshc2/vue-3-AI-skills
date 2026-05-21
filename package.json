@@ -6,11 +6,13 @@
     "vue3",
     "cursor",
     "agent-skills",
+    "ai-skills",
     "composition-api",
     "pinia",
     "vueuse",
     "vue-router",
-    "typescript"
+    "typescript",
+    "cursor-ide"
   ],
   "license": "MIT",
   "type": "module",
@@ -18,12 +20,14 @@
     "vue-cursor-skills": "./bin/install.js"
   },
   "scripts": {
-    "install-skills": "node bin/install.js"
+    "skills:install": "node bin/install.js install",
+    "skills:list": "node bin/install.js list"
   },
   "files": [
     "bin",
     "skills",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=18"
@@ -31,5 +35,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/your-username/vue-cursor-skills.git"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/vue-cursor-skills/issues"
+  },
+  "homepage": "https://github.com/your-username/vue-cursor-skills#readme"
 }

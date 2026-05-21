@@ -1,5 +1,8 @@
 # vue-cursor-skills
 
+[![npm version](https://img.shields.io/npm/v/vue-cursor-skills)](https://www.npmjs.com/package/vue-cursor-skills)
+[![license](https://img.shields.io/npm/l/vue-cursor-skills)](./LICENSE)
+
 Curated AI agent skills for **Vue 3 development in Cursor IDE**.
 
 Merged and deduplicated from the best open-source skill repositories:
@@ -25,13 +28,17 @@ Merged and deduplicated from the best open-source skill repositories:
 
 ## Installation
 
-### Option 1: npx (recommended)
+### Option 1: npx — no install required (recommended)
+
+Run directly from npm without adding to your project dependencies:
 
 ```bash
 npx vue-cursor-skills install
 ```
 
-Copies all skills to `.cursor/skills/` in the current directory.
+Copies all skills to `.cursor/skills/` in the current working directory.
+
+Install into a specific project:
 
 ```bash
 npx vue-cursor-skills install --target /path/to/my-project
@@ -43,16 +50,61 @@ Install specific skills only:
 npx vue-cursor-skills install --skill vue-core --skill vue-pinia
 ```
 
-### Option 2: npm install + script
+### Option 2: npm install as devDependency
+
+Add to your project once and run from `package.json` scripts:
 
 ```bash
 npm install --save-dev vue-cursor-skills
-npx vue-cursor-skills install
 ```
 
-### Option 3: Manual
+Add to `package.json`:
 
-Copy any folder from `skills/` into your project's `.cursor/skills/` directory.
+```json
+{
+  "scripts": {
+    "skills:install": "vue-cursor-skills install"
+  }
+}
+```
+
+Then run:
+
+```bash
+npm run skills:install
+```
+
+### Option 3: Global install
+
+```bash
+npm install -g vue-cursor-skills
+vue-cursor-skills install
+```
+
+### Option 4: Manual
+
+Copy any folder from `skills/` directly into your project's `.cursor/skills/` directory.
+
+---
+
+## After Installation
+
+Skills are copied to `.cursor/skills/<skill-name>/SKILL.md` in your project.
+**Restart Cursor** to activate them.
+
+You can verify installation:
+
+```
+.cursor/
+└── skills/
+    ├── vue-core/
+    ├── vue-pinia/
+    ├── vue-router/
+    ├── vue-testing/
+    ├── vueuse/
+    ├── vue-composables/
+    └── vue-debug/
+```
 
 ---
 
