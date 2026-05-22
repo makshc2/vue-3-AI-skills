@@ -5,7 +5,6 @@
 [![github](https://img.shields.io/badge/github-makshc2%2Fvue--3--AI--skills-blue)](https://github.com/makshc2/vue-3-AI-skills)
 
 Curated AI agent skills for **Vue 3 development in Cursor IDE**.
-
 ---
 
 ## Skills
@@ -109,7 +108,6 @@ You can verify installation:
     ├── vue-composables/
     └── vue-debug/
 ```
-
 ---
 
 ## Usage in Cursor
