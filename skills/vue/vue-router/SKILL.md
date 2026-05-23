@@ -3,7 +3,8 @@ name: vue-router
 description: Vue Router 4 best practices, navigation guards, route params, route lifecycle, and common gotchas. Load when working with routing, navigation, route-component lifecycle, or guard logic.
 license: MIT
 metadata:
-  source: https://github.com/vuejs-ai/skills (vue-router-best-practices v1.0.0)
+  sources:
+    - https://github.com/vuejs-ai/skills (vue-router-best-practices v1.0.0)
   version: "1.0.0"
 ---
 
@@ -71,17 +72,22 @@ router.beforeEach((to) => {
 })
 ```
 
-### `beforeRouteEnter` — No `this`
+### `beforeRouteEnter` — use route-level guard in `<script setup>`
 
-`this` is not available in `beforeRouteEnter`. Use `next(vm => ...)` callback:
+`<script setup>` has no `beforeRouteEnter` composable. Define the guard on the route instead:
 
 ```ts
-beforeRouteEnter(to, from, next) {
-  next((vm) => {
-    vm.title = to.params.title
-  })
+{
+  path: '/posts/:id',
+  component: () => import('@/views/PostView.vue'),
+  beforeEnter: async (to) => {
+    const post = await fetchPost(to.params.id as string)
+    if (!post) return '/not-found'
+  },
 }
 ```
+
+Inside the component, load data with `onBeforeRouteUpdate` or watch `route.params` (see below).
 
 ### Same Route, Different Params — Use `beforeRouteUpdate`
 

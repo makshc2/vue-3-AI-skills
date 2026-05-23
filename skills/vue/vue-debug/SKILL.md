@@ -1,10 +1,17 @@
 ---
-name: vue-debug-guides
+name: vue-debug
 description: Vue 3 debugging and error handling for runtime errors, warnings, async failures, and SSR/hydration issues. Use when diagnosing or fixing Vue issues.
+license: MIT
+metadata:
+  sources:
+    - https://github.com/vuejs-ai/skills (vue-debug-guides)
+  version: "1.0.0"
 ---
 
+# Vue Debug — Troubleshooting Guide
+
 Vue 3 debugging and error handling for runtime issues, warnings, async failures, and hydration bugs.
-For development best practices and common gotchas, use `vue-best-practices`.
+For development best practices and common gotchas, use `vue-core`.
 
 ### Reactivity
 - Tracing unexpected re-renders and state updates → See [reactivity-debugging-hooks](reference/reactivity-debugging-hooks.md)

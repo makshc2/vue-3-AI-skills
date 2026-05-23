@@ -106,7 +106,7 @@ Vite 8 replaces esbuild + Rollup with Oxc + Rolldown.
 #### `rollupOptions` → `rolldownOptions`
 
 ```ts
-// Before (Vite ≤7)
+// Vite ≤7
 export default defineConfig({
   build: {
     rollupOptions: {
@@ -116,7 +116,7 @@ export default defineConfig({
   },
 })
 
-// After (Vite 8)
+// Vite 8+
 export default defineConfig({
   build: {
     rolldownOptions: {

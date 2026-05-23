@@ -3,7 +3,8 @@ name: vue-testing
 description: Vue 3 testing with Vitest, Vue Test Utils, and Playwright E2E. Covers component testing, composable testing, mocking, async patterns, Pinia in tests, Suspense, Teleport, and snapshot anti-patterns. Load when writing or fixing tests for Vue components or composables.
 license: MIT
 metadata:
-  source: https://github.com/vuejs-ai/skills (vue-testing-best-practices v1.0.0)
+  sources:
+    - https://github.com/vuejs-ai/skills (vue-testing-best-practices v1.0.0)
   version: "1.0.0"
 ---
 
@@ -92,15 +93,17 @@ function mountComposable<T>(composable: () => T) {
     setup() { result = composable(); return {} },
     template: '<div />'
   })
-  mount(TestComponent)
-  return result
+  const wrapper = mount(TestComponent)
+  return { result, wrapper }
 }
 
 it('initializes state correctly', () => {
-  const { count, increment } = mountComposable(() => useMyComposable())
+  const { result, wrapper } = mountComposable(() => useMyComposable())
+  const { count, increment } = result
   expect(count.value).toBe(0)
   increment()
   expect(count.value).toBe(1)
+  wrapper.unmount()
 })
 ```
 

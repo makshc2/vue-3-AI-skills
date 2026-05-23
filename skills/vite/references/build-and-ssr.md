@@ -33,7 +33,7 @@ export default defineConfig({
 
 ### Chunking strategy
 
-Configure via `build.rolldownOptions.output.codeSplitting`. See [Rolldown docs](https://rolldown.rs/in-depth/manual-code-splitting).
+Configure via `build.rolldownOptions.output.codeSplitting` (Vite 8+) or `build.rollupOptions.output.manualChunks` (Vite ≤7). See [Rolldown docs](https://rolldown.rs/in-depth/manual-code-splitting).
 
 ---
 

@@ -6,7 +6,7 @@ metadata:
   sources:
     - https://github.com/vuejs-ai/skills (vue-best-practices v18.0.0)
     - https://github.com/antfu/skills (vue skill, generated from vuejs/docs)
-  merged_version: "1.0.0"
+  version: "1.0.0"
 ---
 
 # Vue Core — Best Practices

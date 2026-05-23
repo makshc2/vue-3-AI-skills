@@ -1,11 +1,14 @@
 {
   "name": "vue-cursor-skills",
-  "version": "1.2.0",
-  "description": "Curated AI agent skills for Vue 3 and Vite development in Cursor IDE.",
+  "version": "1.3.0",
+  "description": "Curated AI agent skills for Vue 3 + Vite development — works with Cursor, Amp, and Claude Code.",
   "keywords": [
     "vue3",
     "vite",
     "cursor",
+    "amp",
+    "ampcode",
+    "claude-code",
     "agent-skills",
     "ai-skills",
     "composition-api",
@@ -22,7 +25,7 @@
     "vue-cursor-skills": "bin/install.js"
   },
   "scripts": {
-    "skills:install": "node bin/install.js install",
+    "skills:install": "node bin/install.js install --yes",
     "skills:list": "node bin/install.js list"
   },
   "files": [

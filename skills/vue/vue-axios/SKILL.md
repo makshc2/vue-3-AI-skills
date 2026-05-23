@@ -209,6 +209,7 @@ Use `AbortController` (v0.22+). `CancelToken` is **deprecated** — never use it
 
 ```ts
 // src/composables/useSearch.ts
+import axios from 'axios'
 import { shallowRef, readonly } from 'vue'
 import { apiClient } from '@/api/instance'
 
@@ -320,12 +321,12 @@ Call stores inside functions — never at module scope (SSR safety):
 ```ts
 // src/stores/users.ts
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { shallowRef } from 'vue'
 import { usersApi, type User } from '@/api/users'
 
 export const useUsersStore = defineStore('users', () => {
-  const list = ref<User[]>([])
-  const loading = ref(false)
+  const list = shallowRef<User[]>([])
+  const loading = shallowRef(false)
 
   async function fetchAll() {
     loading.value = true

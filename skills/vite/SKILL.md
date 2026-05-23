@@ -7,12 +7,21 @@ metadata:
     - https://vite.dev/guide/
     - https://github.com/vitejs/vite
     - https://github.com/antfu/skills (vite skill reference)
-  version: "2026.5.23"
+  version: "1.0.0"
 ---
 
 # Vite — Build Tool Skill
 
 > Based on Vite 6+ / Vite 8 (Rolldown). Always use ESM. Prefer TypeScript.
+
+## Version Compatibility
+
+| Vite version | Bundler config key | Transpiler config |
+|---|---|---|
+| Vite ≤7 | `build.rollupOptions` | `esbuild` |
+| Vite 8+ | `build.rolldownOptions` | `oxc` |
+
+Most projects today run Vite 5–7. Examples in this skill show **Vite 8 / Rolldown** syntax by default — replace `rolldownOptions` with `rollupOptions` when targeting Vite ≤7.
 
 ## Preferences
 

@@ -107,7 +107,9 @@ provide(themeActionsKey, { toggleTheme })
 <!-- Consumer.vue -->
 <script setup lang="ts">
 const theme = inject(themeKey)
-const { toggleTheme } = inject(themeActionsKey)!
+const themeActions = inject(themeActionsKey)
+if (!themeActions) throw new Error('themeActionsKey not provided')
+const { toggleTheme } = themeActions
 </script>
 ```
 

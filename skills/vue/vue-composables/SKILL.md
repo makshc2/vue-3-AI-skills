@@ -3,7 +3,8 @@ name: vue-composables
 description: Create library-grade Vue 3 composables with adaptive MaybeRef/MaybeRefOrGetter inputs. Use when the user asks to create a reusable, adaptable, or library-grade composable. Normalizes inputs with toValue()/toRef() for maximum reusability.
 license: MIT
 metadata:
-  source: https://github.com/vuejs-ai/skills (create-adaptable-composable v17.0.0)
+  sources:
+    - https://github.com/vuejs-ai/skills (create-adaptable-composable v17.0.0)
   version: "1.0.0"
 compatibility: Vue 3.3+ or Nuxt 3+
 ---
@@ -109,7 +110,7 @@ export function useFetch<T>(url: MaybeRefOrGetter<string>) {
 ### Element target: `MaybeRefOrGetter<HTMLElement | null | undefined>`
 
 ```ts
-import { watch, toRef } from 'vue'
+import { shallowRef, readonly, watch, toRef } from 'vue'
 import type { MaybeRefOrGetter } from 'vue'
 
 export function useFocusVisible(el: MaybeRefOrGetter<HTMLElement | null | undefined>) {

@@ -6,7 +6,7 @@ metadata:
   sources:
     - https://github.com/antfu/skills (pinia skill, generated from vuejs/pinia v3.0.4)
     - https://github.com/vuejs-ai/skills (vue-pinia-best-practices)
-  merged_version: "1.0.0"
+  version: "1.0.0"
 ---
 
 # Vue Pinia — State Management
@@ -151,8 +151,40 @@ pinia.use(persistPlugin)
 ## HMR Support
 
 ```ts
+import { acceptHMRUpdate } from 'pinia'
+
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useCounterStore, import.meta.hot))
+}
+```
+
+## SSR
+
+For Nuxt 3, use the official `@pinia/nuxt` module — do not create a manual plugin:
+
+```bash
+npm install @pinia/nuxt
+```
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@pinia/nuxt'],
+})
+```
+
+For custom SSR (non-Nuxt), create a **fresh Pinia instance per request**:
+
+```ts
+import { createApp as createVueApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+
+export function createApp() {
+  const app = createVueApp(App)
+  const pinia = createPinia()
+  app.use(pinia)
+  return { app, pinia }
 }
 ```
 
@@ -175,15 +207,3 @@ const store = useCounterStore()
 store.count = 20
 await nextTick()
 ```
-
-## SSR
-
-```ts
-export default defineNuxtPlugin((nuxtApp) => {
-  const pinia = createPinia()
-  nuxtApp.vueApp.use(pinia)
-  return { provide: { pinia } }
-})
-```
-
-Always create a **fresh Pinia instance per request** to avoid cross-request state pollution.

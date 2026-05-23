@@ -38,7 +38,7 @@ const api = axios.create({
     clarifyTimeoutError: true,
   },
 
-  // Decompress gzip/deflate automatically
+  // Decompress gzip/deflate automatically (Node.js only; ignored in browser)
   decompress: true,
 })
 ```
@@ -64,11 +64,13 @@ api.defaults.timeout = 5_000
 Every resolved response has this shape:
 
 ```ts
+import type { AxiosResponse, AxiosResponseHeaders } from 'axios'
+
 interface AxiosResponse<T = unknown> {
   data: T
   status: number
   statusText: string
-  headers: Record<string, string>
+  headers: AxiosResponseHeaders
   config: InternalAxiosRequestConfig
   request: XMLHttpRequest | ClientRequest
 }
