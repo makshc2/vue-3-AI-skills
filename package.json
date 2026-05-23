@@ -1,9 +1,10 @@
 {
   "name": "vue-cursor-skills",
-  "version": "1.1.1",
-  "description": "Curated AI agent skills for Vue 3 development in Cursor IDE.",
+  "version": "1.2.0",
+  "description": "Curated AI agent skills for Vue 3 and Vite development in Cursor IDE.",
   "keywords": [
     "vue3",
+    "vite",
     "cursor",
     "agent-skills",
     "ai-skills",
@@ -11,6 +12,7 @@
     "pinia",
     "vueuse",
     "vue-router",
+    "axios",
     "typescript",
     "cursor-ide"
   ],

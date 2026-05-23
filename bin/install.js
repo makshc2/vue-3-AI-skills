@@ -27,7 +27,7 @@ Commands:
 
 Options:
   --target <dir>       Target project directory (default: cwd)
-  --category <name>    Install one category: vue | javascript | typescript
+  --category <name>    Install one category: vue | vite | javascript | typescript
   --skill <name>       Install specific skill (can repeat)
 
 Examples:
