@@ -4,10 +4,15 @@
 [![license](https://img.shields.io/npm/l/vue-cursor-skills)](./LICENSE)
 [![github](https://img.shields.io/badge/github-makshc2%2Fvue--3--AI--skills-blue)](https://github.com/makshc2/vue-3-AI-skills)
 
-Curated AI agent skills for **Vue 3 development in Cursor IDE**.
+Curated AI agent skills for **Vue 3 + Vite development in Cursor IDE**.
+
+Gives your AI agent deep knowledge of Vue 3, Vite, Pinia, Vue Router, VueUse, testing, and more — so it writes idiomatic, production-ready code out of the box.
+
 ---
 
 ## Skills
+
+### Vue 3
 
 | Skill | Description |
 |-------|-------------|
@@ -18,6 +23,13 @@ Curated AI agent skills for **Vue 3 development in Cursor IDE**.
 | `vueuse` | 200+ VueUse composable utilities with invocation rules |
 | `vue-composables` | Library-grade composables with `MaybeRef`/`MaybeRefOrGetter` patterns |
 | `vue-debug` | Runtime errors, warnings, hydration issues, SSR debugging guide |
+| `vue-axios` | Axios HTTP client patterns for Vue 3 projects |
+
+### Vite
+
+| Skill | Description |
+|-------|-------------|
+| `vite` | Vite config (`defineConfig`, env vars, proxy, aliases), plugin API (hooks, virtual modules, ordering), build (library mode, multi-page, chunking), SSR, Environment API (v6+), Rolldown migration (v8) |
 
 ---
 
@@ -37,6 +49,7 @@ Install by category:
 
 ```bash
 npx vue-cursor-skills install --category vue
+npx vue-cursor-skills install --category vite
 npx vue-cursor-skills install --category typescript
 npx vue-cursor-skills install --category javascript
 ```
@@ -44,7 +57,7 @@ npx vue-cursor-skills install --category javascript
 Install specific skills only:
 
 ```bash
-npx vue-cursor-skills install --skill vue-core --skill vue-pinia
+npx vue-cursor-skills install --skill vue-core --skill vue-pinia --skill vite
 ```
 
 Install into a specific project:
@@ -106,7 +119,9 @@ You can verify installation:
     ├── vue-testing/
     ├── vueuse/
     ├── vue-composables/
-    └── vue-debug/
+    ├── vue-debug/
+    ├── vue-axios/
+    └── vite/
 ```
 ---
 
@@ -115,15 +130,17 @@ You can verify installation:
 After installation, skills are automatically available in Cursor. For best results, reference skills explicitly in your prompt:
 
 ```
-Use vue skill, create a dashboard component with real-time data updates
+Use vue-core skill, create a dashboard component with real-time data updates
 Use vueuse skill, implement infinite scroll with local storage persistence
 Use vue-pinia skill, set up an auth store with SSR support
+Use vite skill, configure proxy and path aliases for my Vue project
+Use vite skill, create a Vite plugin that injects build metadata
 ```
 
 Alternatively, add to your project's `.cursor/rules/` or `AGENTS.md`:
 
 ```markdown
-Always load vue-core and vue-pinia skills for Vue work in this project.
+Always load vue-core, vue-pinia, and vite skills for Vue + Vite work in this project.
 ```
 
 ---
@@ -152,7 +169,16 @@ vue-cursor-skills/
     │   ├── vue-testing/
     │   ├── vueuse/
     │   ├── vue-composables/
-    │   └── vue-debug/
+    │   ├── vue-debug/
+    │   └── vue-axios/
+    ├── vite/                   # Vite build tool skill
+    │   ├── SKILL.md
+    │   └── references/
+    │       ├── core-config.md
+    │       ├── core-features.md
+    │       ├── plugin-api.md
+    │       ├── build-and-ssr.md
+    │       └── environment-and-migration.md
     ├── javascript/             # JS skills (coming soon)
     └── typescript/             # TS skills (coming soon)
 ```
@@ -161,10 +187,10 @@ vue-cursor-skills/
 
 ## Roadmap
 
-- [x] Vue 3 core skills (7 skills)
+- [x] Vue 3 core skills (8 skills)
+- [x] Vite — config, plugins, build, SSR, Environment API, Rolldown migration
 - [ ] JavaScript — modern patterns, ESNext features, async patterns
 - [ ] TypeScript — advanced types, utility types, type-safe patterns
-- [ ] Vite — config, plugins, build optimization
 - [ ] Vitest — advanced testing patterns
 
 ---
