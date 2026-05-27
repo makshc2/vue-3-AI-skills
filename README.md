@@ -34,6 +34,7 @@ All agents use the same `SKILL.md` format — skills are written once and instal
 | `vue-composables` | Library-grade composables with `MaybeRef`/`MaybeRefOrGetter` patterns |
 | `vue-debug` | Runtime errors, warnings, hydration issues, SSR debugging guide |
 | `vue-axios` | Axios HTTP client patterns for Vue 3 projects |
+| `vue-architecture` | Enterprise Vue 3 architecture: structure, state, API layer, routing, layouts, permissions, DX, team standards |
 
 ### Vite
 
@@ -223,6 +224,7 @@ Output:
       - vue-composables
       - vue-debug
       - vue-axios
+      - vue-architecture
   📦 vite
   📁 javascript/  (empty — coming soon)
   📁 typescript/  (empty — coming soon)
@@ -249,7 +251,8 @@ vue-cursor-skills/
     │   ├── vueuse/
     │   ├── vue-composables/
     │   ├── vue-debug/
-    │   └── vue-axios/
+    │   ├── vue-axios/
+    │   └── vue-architecture/
     ├── vite/                   # Vite build tool skill
     │   ├── SKILL.md
     │   └── references/
@@ -280,7 +283,8 @@ All skills use a **single unified format** (`SKILL.md` + `references/`) that is 
 
 ## Roadmap
 
-- [x] Vue 3 core skills (8 skills)
+- [x] Vue 3 core skills (9 skills)
+- [x] `vue-architecture` — enterprise project structure, API layer, routing, team standards
 - [x] Vite — config, plugins, build, SSR, Environment API, Rolldown migration
 - [x] Multi-agent support — Cursor, Amp, Claude Code
 - [ ] JavaScript — modern patterns, ESNext features, async patterns
