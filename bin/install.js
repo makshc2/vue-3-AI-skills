@@ -19,6 +19,10 @@ const AGENTS = {
 const AGENT_NAMES = Object.keys(AGENTS)
 const DEFAULT_AGENT = 'cursor'
 
+const PACKAGE_NAME = 'frontend-agent-skills'
+const ENV_AGENT = 'FRONTEND_AGENT_SKILLS_AGENT'
+const LEGACY_ENV_AGENT = 'VUE_CURSOR_SKILLS_AGENT'
+
 // ─── Args ────────────────────────────────────────────────────────────
 const args = process.argv.slice(2)
 const command = args[0] || 'install'
@@ -27,10 +31,10 @@ const command = args[0] || 'install'
 function printUsage() {
   const agentList = AGENT_NAMES.join(' | ')
   console.log(`
-vue-cursor-skills — AI agent skills for Vue 3 / Vite / JS / TS
+${PACKAGE_NAME} — AI agent skills for Vue 3, JavaScript, and Vite
 
 Usage:
-  npx vue-cursor-skills [command] [options]
+  npx ${PACKAGE_NAME} [command] [options]
 
 Commands:
   install   Copy skills to the target agent directory (default)
@@ -42,20 +46,20 @@ Options:
   --category <name>    Install one category: vue | vite | javascript | typescript
   --skill <name>       Install specific skill (can repeat)
   --agent <name>       Target agent: ${agentList} | all (can repeat)
-                       If omitted, uses VUE_CURSOR_SKILLS_AGENT env or prompts (default: cursor)
+                       If omitted, uses ${ENV_AGENT} env or prompts (default: cursor)
   --yes, -y            Skip agent prompt, use default agent (cursor)
 
 Examples:
-  npx vue-cursor-skills install
-  npx vue-cursor-skills install --agent cursor
-  npx vue-cursor-skills install --agent amp
-  npx vue-cursor-skills install --agent cursor --agent amp
-  npx vue-cursor-skills install --yes
-  npx vue-cursor-skills install --agent all
-  npx vue-cursor-skills install --category vue --agent amp
-  npx vue-cursor-skills install --skill vue-core --skill vite --agent claude
-  npx vue-cursor-skills install --target /path/to/project
-  npx vue-cursor-skills list
+  npx ${PACKAGE_NAME} install
+  npx ${PACKAGE_NAME} install --agent cursor
+  npx ${PACKAGE_NAME} install --agent amp
+  npx ${PACKAGE_NAME} install --agent cursor --agent amp
+  npx ${PACKAGE_NAME} install --yes
+  npx ${PACKAGE_NAME} install --agent all
+  npx ${PACKAGE_NAME} install --category vue --agent amp
+  npx ${PACKAGE_NAME} install --skill vue-core --skill vite --agent claude
+  npx ${PACKAGE_NAME} install --target /path/to/project
+  npx ${PACKAGE_NAME} list
 `)
 }
 
@@ -116,11 +120,13 @@ function listSkills() {
 }
 
 function resolveAgentsFromEnv() {
-  const envAgent = process.env.VUE_CURSOR_SKILLS_AGENT?.trim().toLowerCase()
+  const envAgent = (
+    process.env[ENV_AGENT] ?? process.env[LEGACY_ENV_AGENT]
+  )?.trim().toLowerCase()
   if (!envAgent) return null
   if (envAgent === 'all') return [...AGENT_NAMES]
   if (AGENTS[envAgent]) return [envAgent]
-  console.error(`Unknown VUE_CURSOR_SKILLS_AGENT: "${envAgent}". Available: ${AGENT_NAMES.join(', ')}, all`)
+  console.error(`Unknown ${ENV_AGENT}: "${envAgent}". Available: ${AGENT_NAMES.join(', ')}, all`)
   process.exit(1)
 }
 
@@ -246,7 +252,7 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents) {
   }
 
   if (totalInstalled === 0) {
-    console.error(`No matching skills found. Run "npx vue-cursor-skills list" to see available skills.\n`)
+    console.error(`No matching skills found. Run "npx ${PACKAGE_NAME} list" to see available skills.\n`)
     process.exit(1)
   }
 

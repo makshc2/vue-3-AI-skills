@@ -1,0 +1,25 @@
+{
+  "description": "Vue 3, JavaScript & Vite AI agent skills for Cursor, Amp Code, and Claude Code",
+  "website": "https://www.npmjs.com/package/frontend-agent-skills",
+  "topics": [
+    "vue3",
+    "vue",
+    "javascript",
+    "vite",
+    "cursor",
+    "cursor-ide",
+    "cursor-skills",
+    "agent-skills",
+    "ai-skills",
+    "claude-code",
+    "amp",
+    "ampcode",
+    "pinia",
+    "vueuse",
+    "vitest",
+    "frontend",
+    "llm",
+    "coding-agent",
+    "skill-md"
+  ]
+}

@@ -1,22 +1,91 @@
-# vue-cursor-skills
+# frontend-agent-skills
 
-[![npm version](https://img.shields.io/npm/v/vue-cursor-skills)](https://www.npmjs.com/package/vue-cursor-skills)
-[![license](https://img.shields.io/npm/l/vue-cursor-skills)](./LICENSE)
-[![github](https://img.shields.io/badge/github-makshc2%2Fvue--3--AI--skills-blue)](https://github.com/makshc2/vue-3-AI-skills)
+**Vue 3 · JavaScript · Vite AI agent skills for [Cursor](https://cursor.sh), [Amp Code](https://ampcode.com), and [Claude Code](https://docs.anthropic.com/en/docs/claude-code)**
 
-Curated AI agent skills for **Vue 3 + Vite development** — works with **Cursor**, **Amp**, and **Claude Code**.
+[![npm version](https://img.shields.io/npm/v/frontend-agent-skills)](https://www.npmjs.com/package/frontend-agent-skills)
+[![npm downloads](https://img.shields.io/npm/dm/frontend-agent-skills)](https://www.npmjs.com/package/frontend-agent-skills)
+[![license](https://img.shields.io/npm/l/frontend-agent-skills)](./LICENSE)
+[![github stars](https://img.shields.io/github/stars/makshc2/vue-3-AI-skills?style=social)](https://github.com/makshc2/vue-3-AI-skills)
 
-Gives your AI agent deep knowledge of Vue 3, Vite, Pinia, Vue Router, VueUse, testing, and more — so it writes idiomatic, production-ready code out of the box.
+> **Looking for Cursor skills for Vue? JavaScript agent skills? Amp or Claude Code rules?**  
+> Install production-ready `SKILL.md` files for your AI coding agent in one command:
 
-### Supported Agents
+```bash
+npx frontend-agent-skills install
+```
 
-| Agent | Skills directory | Status |
-|-------|-----------------|--------|
-| [Cursor](https://cursor.sh) | `.cursor/skills/` | ✅ Supported |
-| [Amp](https://ampcode.com) | `.agents/skills/` | ✅ Supported |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | `.claude/skills/` | ✅ Supported |
+Curated **AI agent skills** for **Vue 3**, **JavaScript**, and **Vite** frontend development. Works with **Cursor IDE**, **Amp Code**, and **Claude Code** — the same skills, installed to `.cursor/skills/`, `.agents/skills/`, or `.claude/skills/`.
+
+Gives your AI agent deep knowledge of Vue 3 Composition API, JavaScript ES2020+, Vite, Pinia, Vue Router, VueUse, Vitest, and more — so it writes idiomatic, production-ready code out of the box.
+
+| Install | Links |
+|---------|-------|
+| `npx frontend-agent-skills install` | [npm package](https://www.npmjs.com/package/frontend-agent-skills) · [GitHub repo](https://github.com/makshc2/vue-3-AI-skills) · [Report issue](https://github.com/makshc2/vue-3-AI-skills/issues) |
+
+> **Migrating from `vue-cursor-skills`?** Renamed in v2.0.0 — same skills, clearer name. Old CLI alias still works.
+
+### Supported AI Agents
+
+| Agent | Skills directory | Search terms |
+|-------|-----------------|--------------|
+| [Cursor](https://cursor.sh) | `.cursor/skills/` | cursor skills, cursor rules, cursor vue skills |
+| [Amp](https://ampcode.com) | `.agents/skills/` | amp skills, amp code skills, amp agent skills |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | `.claude/skills/` | claude code skills, claude agent skills |
 
 All agents use the same `SKILL.md` format — skills are written once and installed to the correct directory for each agent.
+
+---
+
+## Frequently searched
+
+<details>
+<summary><strong>Cursor skills for Vue 3</strong></summary>
+
+```bash
+npx frontend-agent-skills install --agent cursor --category vue
+```
+
+Installs: `vue-core`, `vue-pinia`, `vue-router`, `vue-testing`, `vueuse`, `vue-composables`, `vue-debug`, `vue-axios`, `vue-architecture`.
+</details>
+
+<details>
+<summary><strong>JavaScript skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --category javascript
+```
+
+Installs: `javascript-core`, `javascript-dom`, `javascript-debug`, `javascript-node`, `javascript-testing`, `javascript-performance`, `javascript-data`.
+</details>
+
+<details>
+<summary><strong>Amp Code skills</strong></summary>
+
+```bash
+npx frontend-agent-skills install --agent amp
+```
+
+Copies skills to `.agents/skills/` — Amp's native skills directory.
+</details>
+
+<details>
+<summary><strong>Claude Code skills</strong></summary>
+
+```bash
+npx frontend-agent-skills install --agent claude
+```
+
+Copies skills to `.claude/skills/` — use as slash commands or auto-loaded skills.
+</details>
+
+<details>
+<summary><strong>Install all agents at once</strong></summary>
+
+```bash
+npx frontend-agent-skills install --agent all
+```
+
+</details>
 
 ---
 
@@ -61,7 +130,7 @@ All agents use the same `SKILL.md` format — skills are written once and instal
 ### Option 1: npx — no install required (recommended)
 
 ```bash
-npx vue-cursor-skills install
+npx frontend-agent-skills install
 ```
 
 You will be prompted to choose your agent(s):
@@ -82,46 +151,46 @@ Press **Enter** to skip — defaults to **Cursor**.
 Skip the prompt in CI or scripts:
 
 ```bash
-npx vue-cursor-skills install --yes
+npx frontend-agent-skills install --yes
 # or
-VUE_CURSOR_SKILLS_AGENT=amp npx vue-cursor-skills install
+FRONTEND_AGENT_SKILLS_AGENT=amp npx frontend-agent-skills install
 ```
 
 #### Specify agent directly (no prompt)
 
 ```bash
-npx vue-cursor-skills install --agent cursor        # Cursor only
-npx vue-cursor-skills install --agent amp            # Amp only
-npx vue-cursor-skills install --agent claude         # Claude Code only
-npx vue-cursor-skills install --agent cursor --agent amp   # multiple agents
-npx vue-cursor-skills install --agent all            # all supported agents
+npx frontend-agent-skills install --agent cursor        # Cursor only
+npx frontend-agent-skills install --agent amp            # Amp only
+npx frontend-agent-skills install --agent claude         # Claude Code only
+npx frontend-agent-skills install --agent cursor --agent amp   # multiple agents
+npx frontend-agent-skills install --agent all            # all supported agents
 ```
 
 #### Filter by category or specific skills
 
 ```bash
-npx vue-cursor-skills install --category vue
-npx vue-cursor-skills install --category vite
-npx vue-cursor-skills install --skill vue-core --skill vue-pinia --skill vite
+npx frontend-agent-skills install --category vue
+npx frontend-agent-skills install --category javascript
+npx frontend-agent-skills install --skill vue-core --skill javascript-core --skill vite
 ```
 
 #### Combine agent + category/skill filters
 
 ```bash
-npx vue-cursor-skills install --agent amp --category vue
-npx vue-cursor-skills install --agent all --skill vue-core --skill vite
+npx frontend-agent-skills install --agent amp --category vue
+npx frontend-agent-skills install --agent all --skill vue-core --skill vite
 ```
 
 #### Install into a specific project
 
 ```bash
-npx vue-cursor-skills install --target /path/to/my-project
+npx frontend-agent-skills install --target /path/to/my-project
 ```
 
 ### Option 2: npm install as devDependency
 
 ```bash
-npm install --save-dev vue-cursor-skills
+npm install --save-dev frontend-agent-skills
 ```
 
 Add to `package.json`:
@@ -129,8 +198,8 @@ Add to `package.json`:
 ```json
 {
   "scripts": {
-    "skills:install": "vue-cursor-skills install",
-    "skills:install:all": "vue-cursor-skills install --agent all"
+    "skills:install": "frontend-agent-skills install",
+    "skills:install:all": "frontend-agent-skills install --agent all"
   }
 }
 ```
@@ -144,8 +213,8 @@ npm run skills:install
 ### Option 3: Global install
 
 ```bash
-npm install -g vue-cursor-skills
-vue-cursor-skills install
+npm install -g frontend-agent-skills
+frontend-agent-skills install
 ```
 
 ### Option 4: Manual
@@ -170,17 +239,17 @@ Example structure after installing for all agents:
 your-project/
 ├── .cursor/skills/       ← Cursor
 │   ├── vue-core/
-│   ├── vue-pinia/
+│   ├── javascript-core/
 │   ├── vite/
 │   └── ...
 ├── .agents/skills/       ← Amp
 │   ├── vue-core/
-│   ├── vue-pinia/
+│   ├── javascript-core/
 │   ├── vite/
 │   └── ...
 └── .claude/skills/       ← Claude Code
     ├── vue-core/
-    ├── vue-pinia/
+    ├── javascript-core/
     ├── vite/
     └── ...
 ```
@@ -194,6 +263,7 @@ After installation, skills are automatically available in your agent. For best r
 **Cursor:**
 ```
 Use vue-core skill, create a dashboard component with real-time data updates
+Use javascript-core skill, refactor this module to ES modules with async/await
 Use vite skill, configure proxy and path aliases for my Vue project
 ```
 
@@ -201,11 +271,13 @@ Use vite skill, configure proxy and path aliases for my Vue project
 ```
 Use the vite skill to create a Vite plugin that injects build metadata
 Use vue-pinia skill, set up an auth store with SSR support
+Use javascript-debug skill, why does this async loop not await?
 ```
 
 **Claude Code:**
 ```
 /vue-core create a dashboard component with real-time data updates
+/javascript-core refactor this file to modern ES2020+ patterns
 /vite configure proxy and path aliases for my Vue project
 ```
 
@@ -213,16 +285,16 @@ Alternatively, add to your project's configuration:
 
 | Agent | File | Example |
 |-------|------|---------|
-| Cursor | `.cursor/rules/` | `Always load vue-core and vite skills for Vue work.` |
-| Amp | `AGENTS.md` | `Always load vue-core and vite skills for Vue work.` |
-| Claude Code | `CLAUDE.md` | `Always load vue-core and vite skills for Vue work.` |
+| Cursor | `.cursor/rules/` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
+| Amp | `AGENTS.md` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
+| Claude Code | `CLAUDE.md` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
 
 ---
 
 ## List Available Skills
 
 ```bash
-npx vue-cursor-skills list
+npx frontend-agent-skills list
 ```
 
 Output:
@@ -230,13 +302,7 @@ Output:
   📁 vue/
       - vue-core
       - vue-pinia
-      - vue-router
-      - vue-testing
-      - vueuse
-      - vue-composables
-      - vue-debug
-      - vue-axios
-      - vue-architecture
+      ...
   📦 vite
   📁 javascript/
       - javascript-core
@@ -256,42 +322,15 @@ Output:
 ## Repository Structure
 
 ```
-vue-cursor-skills/
+frontend-agent-skills/
 ├── package.json
 ├── README.md
 ├── bin/
 │   └── install.js              # CLI installer (multi-agent)
 └── skills/
     ├── vue/                    # Vue 3 skills
-    │   ├── vue-core/
-    │   ├── vue-pinia/
-    │   ├── vue-router/
-    │   ├── vue-testing/
-    │   ├── vueuse/
-    │   ├── vue-composables/
-    │   ├── vue-debug/
-    │   ├── vue-axios/
-    │   └── vue-architecture/
     ├── vite/                   # Vite build tool skill
-    │   ├── SKILL.md
-    │   └── references/
-    │       ├── core-config.md
-    │       ├── core-features.md
-    │       ├── plugin-api.md
-    │       ├── build-and-ssr.md
-    │       └── environment-and-migration.md
     ├── javascript/             # JavaScript skills
-    │   ├── javascript-core/
-    │   │   ├── SKILL.md
-    │   │   └── references/
-    │   ├── javascript-dom/
-    │   ├── javascript-debug/
-    │   │   ├── SKILL.md
-    │   │   └── reference/      # one pitfall per file
-    │   ├── javascript-node/
-    │   ├── javascript-testing/
-    │   ├── javascript-performance/
-    │   └── javascript-data/
     └── typescript/             # TS skills (coming soon)
 ```
 
@@ -311,6 +350,18 @@ All skills use a **single unified format** (`SKILL.md` + `references/`) that is 
 
 ---
 
+## Migration from vue-cursor-skills
+
+| Before (v1.x) | After (v2.x) |
+|---------------|--------------|
+| `npx vue-cursor-skills install` | `npx frontend-agent-skills install` |
+| `npm i -D vue-cursor-skills` | `npm i -D frontend-agent-skills` |
+| `VUE_CURSOR_SKILLS_AGENT=amp` | `FRONTEND_AGENT_SKILLS_AGENT=amp` |
+
+The old package name `vue-cursor-skills` and CLI alias remain available temporarily for backward compatibility.
+
+---
+
 ## Roadmap
 
 - [x] Vue 3 core skills (9 skills)
@@ -318,9 +369,41 @@ All skills use a **single unified format** (`SKILL.md` + `references/`) that is 
 - [x] Vite — config, plugins, build, SSR, Environment API, Rolldown migration
 - [x] Multi-agent support — Cursor, Amp, Claude Code
 - [x] JavaScript — 7 skills: core, dom, debug, node, testing, performance, data
+- [x] Package rename — `frontend-agent-skills` v2.0.0
 - [ ] TypeScript — advanced types, utility types, type-safe patterns
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others
+
+---
+
+## npm & GitHub discoverability
+
+Indexed by **npm search** (keywords, description, README) and **Google** (npm package page + GitHub README).
+
+### GitHub repository settings
+
+In [Repository settings → General](https://github.com/makshc2/vue-3-AI-skills/settings):
+
+| Field | Value |
+|-------|-------|
+| **Description** | `Vue 3, JavaScript & Vite AI agent skills for Cursor, Amp Code, and Claude Code` |
+| **Website** | `https://www.npmjs.com/package/frontend-agent-skills` |
+| **Topics** | `vue3`, `vue`, `javascript`, `vite`, `cursor`, `cursor-ide`, `cursor-skills`, `agent-skills`, `ai-skills`, `claude-code`, `amp`, `ampcode`, `pinia`, `vueuse`, `vitest`, `frontend`, `llm`, `coding-agent`, `skill-md` |
+
+### npm registry
+
+After publish, deprecate the old package name so npm search surfaces the redirect message:
+
+```bash
+npm deprecate vue-cursor-skills "Renamed to frontend-agent-skills → npx frontend-agent-skills install"
+```
+
+Verify indexing:
+
+```bash
+npm search frontend-agent-skills
+npm view frontend-agent-skills
+```
 
 ---
 

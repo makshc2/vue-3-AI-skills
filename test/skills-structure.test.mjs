@@ -119,7 +119,7 @@ describe('markdown internal links', () => {
 
 describe('installer', () => {
   it('installs javascript category to all agents', () => {
-    const target = mkdtempSync(join(tmpdir(), 'vue-cursor-skills-test-'))
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
 
     try {
       execFileSync(process.execPath, [
