@@ -42,6 +42,18 @@ All agents use the same `SKILL.md` format — skills are written once and instal
 |-------|-------------|
 | `vite` | Vite config (`defineConfig`, env vars, proxy, aliases), plugin API (hooks, virtual modules, ordering), build (library mode, multi-page, chunking), SSR, Environment API (v6+), Rolldown migration (v8) |
 
+### JavaScript
+
+| Skill | Description |
+|-------|-------------|
+| `javascript-core` | Modern ES2020+ best practices: declarations, naming, strict equality, functions, destructuring, async/await & Promise APIs, immutability, array methods, ES modules, error handling |
+| `javascript-dom` | Vanilla DOM: selectors, event delegation, safe HTML (no innerHTML XSS), forms & FormData, Intersection/Resize/Mutation observers, layout performance, cleanup |
+| `javascript-debug` | Language pitfall catalog: `this` binding, closures in loops, TDZ, floating point, reference equality, coercion, mutation, microtasks vs macrotasks, async traps, JSON losses |
+| `javascript-node` | Node.js ≥18: `node:` builtins, fs/promises, env config, CLI with parseArgs, streams & pipeline, child processes, AbortSignal timeouts, graceful shutdown, worker threads |
+| `javascript-testing` | Vitest for plain JS: AAA structure, matchers, vi.fn/spyOn/mock, fake timers, async rejects/resolves, it.each, setup/teardown, what not to test |
+| `javascript-performance` | Debounce/throttle, memoization, rAF/idle scheduling, Web Workers, memory leak prevention, Map/Set in hot loops, lazy loading, measuring with Performance API |
+| `javascript-data` | Dates & time zones, Intl formatting (currency, plurals, lists, collation), JSON gotchas, structuredClone, regex best practices, Map/Set/WeakMap collections |
+
 ---
 
 ## Installation
@@ -226,7 +238,14 @@ Output:
       - vue-axios
       - vue-architecture
   📦 vite
-  📁 javascript/  (empty — coming soon)
+  📁 javascript/
+      - javascript-core
+      - javascript-data
+      - javascript-debug
+      - javascript-dom
+      - javascript-node
+      - javascript-performance
+      - javascript-testing
   📁 typescript/  (empty — coming soon)
 
   Supported agents: Cursor (cursor), Amp (amp), Claude Code (claude)
@@ -261,7 +280,18 @@ vue-cursor-skills/
     │       ├── plugin-api.md
     │       ├── build-and-ssr.md
     │       └── environment-and-migration.md
-    ├── javascript/             # JS skills (coming soon)
+    ├── javascript/             # JavaScript skills
+    │   ├── javascript-core/
+    │   │   ├── SKILL.md
+    │   │   └── references/
+    │   ├── javascript-dom/
+    │   ├── javascript-debug/
+    │   │   ├── SKILL.md
+    │   │   └── reference/      # one pitfall per file
+    │   ├── javascript-node/
+    │   ├── javascript-testing/
+    │   ├── javascript-performance/
+    │   └── javascript-data/
     └── typescript/             # TS skills (coming soon)
 ```
 
@@ -287,7 +317,7 @@ All skills use a **single unified format** (`SKILL.md` + `references/`) that is 
 - [x] `vue-architecture` — enterprise project structure, API layer, routing, team standards
 - [x] Vite — config, plugins, build, SSR, Environment API, Rolldown migration
 - [x] Multi-agent support — Cursor, Amp, Claude Code
-- [ ] JavaScript — modern patterns, ESNext features, async patterns
+- [x] JavaScript — 7 skills: core, dom, debug, node, testing, performance, data
 - [ ] TypeScript — advanced types, utility types, type-safe patterns
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others

@@ -1,7 +1,7 @@
 {
   "name": "vue-cursor-skills",
-  "version": "1.4.0",
-  "description": "Curated AI agent skills for Vue 3 + Vite development — works with Cursor, Amp, and Claude Code.",
+  "version": "1.5.0",
+  "description": "Curated AI agent skills for Vue 3, Vite, and JavaScript development — works with Cursor, Amp, and Claude Code.",
   "keywords": [
     "vue3",
     "vite",
@@ -16,6 +16,8 @@
     "vueuse",
     "vue-router",
     "axios",
+    "javascript",
+    "esmodules",
     "typescript",
     "cursor-ide"
   ],
@@ -26,7 +28,9 @@
   },
   "scripts": {
     "skills:install": "node bin/install.js install --yes",
-    "skills:list": "node bin/install.js list"
+    "skills:list": "node bin/install.js list",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "files": [
     "bin",
@@ -44,5 +48,8 @@
   "bugs": {
     "url": "https://github.com/makshc2/vue-3-AI-skills/issues"
   },
-  "homepage": "https://github.com/makshc2/vue-3-AI-skills#readme"
+  "homepage": "https://github.com/makshc2/vue-3-AI-skills#readme",
+  "devDependencies": {
+    "vitest": "^3.2.6"
+  }
 }
