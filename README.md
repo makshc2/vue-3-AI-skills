@@ -1,6 +1,6 @@
 # frontend-agent-skills
 
-**Vue 3 · JavaScript · Vite AI agent skills for [Cursor](https://cursor.sh), [Amp Code](https://ampcode.com), and [Claude Code](https://docs.anthropic.com/en/docs/claude-code)**
+**Vue 3 · TypeScript · JavaScript · Vite AI agent skills for [Cursor](https://cursor.sh), [Amp Code](https://ampcode.com), and [Claude Code](https://docs.anthropic.com/en/docs/claude-code)**
 
 [![npm version](https://img.shields.io/npm/v/frontend-agent-skills)](https://www.npmjs.com/package/frontend-agent-skills)
 [![npm downloads](https://img.shields.io/npm/dm/frontend-agent-skills)](https://www.npmjs.com/package/frontend-agent-skills)
@@ -14,9 +14,9 @@
 npx frontend-agent-skills install
 ```
 
-Curated **AI agent skills** for **Vue 3**, **JavaScript**, and **Vite** frontend development. Works with **Cursor IDE**, **Amp Code**, and **Claude Code** — the same skills, installed to `.cursor/skills/`, `.agents/skills/`, or `.claude/skills/`.
+Curated **AI agent skills** for **Vue 3**, **TypeScript**, **JavaScript**, and **Vite** frontend development. Works with **Cursor IDE**, **Amp Code**, and **Claude Code** — the same skills, installed to `.cursor/skills/`, `.agents/skills/`, or `.claude/skills/`.
 
-Gives your AI agent deep knowledge of Vue 3 Composition API, JavaScript ES2020+, Vite, Pinia, Vue Router, VueUse, Vitest, and more — so it writes idiomatic, production-ready code out of the box.
+Gives your AI agent deep knowledge of Vue 3 Composition API, TypeScript (generics, utility types, typed `<script setup>`), JavaScript ES2020+, Vite, Pinia, Vue Router, VueUse, Vitest, and more — so it writes idiomatic, production-ready code out of the box.
 
 | Install | Links |
 |---------|-------|
@@ -56,6 +56,16 @@ npx frontend-agent-skills install --category javascript
 ```
 
 Installs: `javascript-core`, `javascript-dom`, `javascript-debug`, `javascript-node`, `javascript-testing`, `javascript-performance`, `javascript-data`.
+</details>
+
+<details>
+<summary><strong>TypeScript skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --category typescript
+```
+
+Installs: `typescript-core`, `typescript-types`, `typescript-config`, `typescript-vue`, `typescript-testing`, `typescript-debug`.
 </details>
 
 <details>
@@ -122,6 +132,17 @@ npx frontend-agent-skills install --agent all
 | `javascript-testing` | Vitest for plain JS: AAA structure, matchers, vi.fn/spyOn/mock, fake timers, async rejects/resolves, it.each, setup/teardown, what not to test |
 | `javascript-performance` | Debounce/throttle, memoization, rAF/idle scheduling, Web Workers, memory leak prevention, Map/Set in hot loops, lazy loading, measuring with Performance API |
 | `javascript-data` | Dates & time zones, Intl formatting (currency, plurals, lists, collation), JSON gotchas, structuredClone, regex best practices, Map/Set/WeakMap collections |
+
+### TypeScript
+
+| Skill | Description |
+|-------|-------------|
+| `typescript-core` | Fundamentals: type annotations, `interface` vs `type`, unions, literal types, narrowing, functions, classes, enums, `unknown` vs `any`, strict-mode discipline |
+| `typescript-types` | Utility types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`...), constrained generics, mapped types, conditional types with `infer`, template literal types, discriminated unions |
+| `typescript-config` | `tsconfig.json`, strict-mode flags explained, module resolution (`bundler`/`NodeNext`), path aliases, project references, declaration (`.d.ts`) files |
+| `typescript-vue` | Typed `<script setup lang="ts">`: `defineProps`/`defineEmits`/`defineModel`, generic components, template refs, `InjectionKey`, typed composables & Pinia stores |
+| `typescript-testing` | Typed Vitest patterns: `vi.fn<T>`/`Mocked<T>` mocks, `expectTypeOf`/`assertType` type-testing, typed fixture factories, avoiding `any` in test doubles |
+| `typescript-debug` | Compiler error decoder: assignability (TS2345/TS2322/TS2769), nullability (TS18048), non-null assertion pitfalls, type widening, `any` vs `unknown`, structural typing surprises |
 
 ---
 
@@ -312,7 +333,13 @@ Output:
       - javascript-node
       - javascript-performance
       - javascript-testing
-  📁 typescript/  (empty — coming soon)
+  📁 typescript/
+      - typescript-config
+      - typescript-core
+      - typescript-debug
+      - typescript-testing
+      - typescript-types
+      - typescript-vue
 
   Supported agents: Cursor (cursor), Amp (amp), Claude Code (claude)
 ```
@@ -331,7 +358,7 @@ frontend-agent-skills/
     ├── vue/                    # Vue 3 skills
     ├── vite/                   # Vite build tool skill
     ├── javascript/             # JavaScript skills
-    └── typescript/             # TS skills (coming soon)
+    └── typescript/             # TypeScript skills
 ```
 
 ---
@@ -370,7 +397,7 @@ The old package name `vue-cursor-skills` and CLI alias remain available temporar
 - [x] Multi-agent support — Cursor, Amp, Claude Code
 - [x] JavaScript — 7 skills: core, dom, debug, node, testing, performance, data
 - [x] Package rename — `frontend-agent-skills` v2.0.0
-- [ ] TypeScript — advanced types, utility types, type-safe patterns
+- [x] TypeScript — 6 skills: core, types (advanced/utility), config, vue, testing, debug
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others
 
@@ -386,7 +413,7 @@ In [Repository settings → General](https://github.com/makshc2/vue-3-AI-skills/
 
 | Field | Value |
 |-------|-------|
-| **Description** | `Vue 3, JavaScript & Vite AI agent skills for Cursor, Amp Code, and Claude Code` |
+| **Description** | `Vue 3, TypeScript, JavaScript & Vite AI agent skills for Cursor, Amp Code, and Claude Code` |
 | **Website** | `https://www.npmjs.com/package/frontend-agent-skills` |
 | **Topics** | `vue3`, `vue`, `javascript`, `vite`, `cursor`, `cursor-ide`, `cursor-skills`, `agent-skills`, `ai-skills`, `claude-code`, `amp`, `ampcode`, `pinia`, `vueuse`, `vitest`, `frontend`, `llm`, `coding-agent`, `skill-md` |
 

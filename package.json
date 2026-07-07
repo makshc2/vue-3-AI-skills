@@ -1,7 +1,7 @@
 {
   "name": "frontend-agent-skills",
-  "version": "2.0.1",
-  "description": "Vue 3, JavaScript & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
+  "version": "2.1.0",
+  "description": "Vue 3, TypeScript, JavaScript & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
   "keywords": [
     "cursor-skills",
     "cursor-rules",

@@ -108,3 +108,66 @@ describe('javascript-testing conventions', () => {
     expect(countWords(input)).toBe(expected)
   })
 })
+
+describe('typescript-core narrowing patterns', () => {
+  function assertNever(value) {
+    throw new Error(`Unhandled case: ${JSON.stringify(value)}`)
+  }
+
+  function area(shape) {
+    switch (shape.kind) {
+      case 'circle': return Math.PI * shape.radius ** 2
+      case 'square': return shape.side ** 2
+      default: return assertNever(shape)
+    }
+  }
+
+  it('computes area for each discriminated union member', () => {
+    expect(area({ kind: 'circle', radius: 2 })).toBeCloseTo(Math.PI * 4)
+    expect(area({ kind: 'square', side: 3 })).toBe(9)
+  })
+
+  it('throws for an unhandled discriminant', () => {
+    expect(() => area({ kind: 'triangle' })).toThrow(/Unhandled case/)
+  })
+})
+
+describe('typescript-types utility patterns', () => {
+  it('groupBy mirrors a generic groupBy<T, K> implementation', () => {
+    function groupBy(items, keyFn) {
+      const result = {}
+      for (const item of items) {
+        const key = keyFn(item)
+        ;(result[key] ??= []).push(item)
+      }
+      return result
+    }
+
+    const users = [{ role: 'admin' }, { role: 'member' }, { role: 'admin' }]
+    const byRole = groupBy(users, (u) => u.role)
+
+    expect(byRole.admin).toHaveLength(2)
+    expect(byRole.member).toHaveLength(1)
+  })
+})
+
+describe('typescript-debug pitfalls (bug vs fix)', () => {
+  it('capturing a narrowed value locally survives an async callback', async () => {
+    const state = { user: { name: 'Ann' } }
+
+    const readLater = () =>
+      new Promise((resolve) => {
+        const user = state.user
+        setTimeout(() => resolve(user?.name), 0)
+      })
+
+    expect(await readLater()).toBe('Ann')
+  })
+
+  it('nullish coalescing only substitutes for null/undefined, not falsy values', () => {
+    expect(0 ?? 'fallback').toBe(0)
+    expect('' ?? 'fallback').toBe('')
+    expect(null ?? 'fallback').toBe('fallback')
+    expect(undefined ?? 'fallback').toBe('fallback')
+  })
+})

@@ -62,8 +62,8 @@ function extractRelativeLinks(content) {
 const allSkills = discoverSkills()
 
 describe('skill frontmatter', () => {
-  it('discovers at least javascript skills', () => {
-    expect(allSkills.length).toBeGreaterThanOrEqual(7)
+  it('discovers at least javascript and typescript skills', () => {
+    expect(allSkills.length).toBeGreaterThanOrEqual(13)
   })
 
   it.each(allSkills.map((s) => [s.name, s.category, s.skillPath]))(
@@ -73,7 +73,7 @@ describe('skill frontmatter', () => {
       const fm = parseFrontmatter(content)
       expect(fm, `${name}: missing YAML frontmatter`).not.toBeNull()
       expect(fm.name, `${name}: missing name`).toBeTruthy()
-      if (category === 'javascript') {
+      if (category === 'javascript' || category === 'typescript') {
         expect(fm.name, `${name}: name must match folder`).toBe(name)
       }
       expect(fm.description, `${name}: missing description`).toBeTruthy()
@@ -153,6 +153,49 @@ describe('installer', () => {
 
         for (const skill of expected) {
           const src = readFileSync(join(SKILLS_DIR, 'javascript', skill, 'SKILL.md'), 'utf8')
+          const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
+          expect(dst).toBe(src)
+        }
+      }
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
+  it('installs typescript category to all agents', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--category',
+        'typescript',
+        '--agent',
+        'all',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const agents = ['.cursor/skills', '.agents/skills', '.claude/skills']
+      const expected = [
+        'typescript-config',
+        'typescript-core',
+        'typescript-debug',
+        'typescript-testing',
+        'typescript-types',
+        'typescript-vue',
+      ]
+
+      for (const agentDir of agents) {
+        const installedDir = join(target, agentDir)
+        expect(existsSync(installedDir)).toBe(true)
+        const installed = readdirSync(installedDir).sort()
+        expect(installed).toEqual(expected)
+
+        for (const skill of expected) {
+          const src = readFileSync(join(SKILLS_DIR, 'typescript', skill, 'SKILL.md'), 'utf8')
           const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
           expect(dst).toBe(src)
         }

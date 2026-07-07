@@ -31,7 +31,7 @@ const command = args[0] || 'install'
 function printUsage() {
   const agentList = AGENT_NAMES.join(' | ')
   console.log(`
-${PACKAGE_NAME} — AI agent skills for Vue 3, JavaScript, and Vite
+${PACKAGE_NAME} — AI agent skills for Vue 3, TypeScript, JavaScript, and Vite
 
 Usage:
   npx ${PACKAGE_NAME} [command] [options]
