@@ -1,0 +1,57 @@
+version: 1
+kit_version: "0.1.8"
+
+project:
+  name: "frontend-agent-skills"
+  stack: node
+  agent_language: "uk"
+
+package_manager: npm
+
+pipeline:
+  require_spec_review: true
+  max_active_changes: 1
+  archive_after_merge: true
+
+roles:
+  explorer:
+    command: /opsx:explore
+    mode: read-only
+    model_hint: fast
+  architect:
+    command: /opsx:propose
+    mode: specs-only
+    model_hint: strong
+  spec_reviewer:
+    command: /opsx:review
+    mode: read-only
+    model_hint: medium
+  implementer:
+    command: /opsx:apply
+    mode: code
+    model_hint: strong
+    notes: "Edit skills/ and bin/; load project-conventions; run npm test"
+  verifier:
+    type: ci
+    gates:
+      - openspec-validate-strict
+      - test
+
+handoff:
+  explore_to_propose: decision_brief
+  propose_to_review: validate_strict
+  review_to_apply: explicit_approve
+  apply_to_verify: all_tasks_checked
+
+memory:
+  enabled: true
+  file: .cursor/memory.json
+
+mcp:
+  baseline:
+    - memory
+
+verifier:
+  lint_command: ""
+  build_command: ""
+  test_command: "npm test"

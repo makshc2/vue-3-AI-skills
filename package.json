@@ -1,7 +1,7 @@
 {
   "name": "frontend-agent-skills",
-  "version": "2.1.0",
-  "description": "Vue 3, TypeScript, JavaScript & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
+  "version": "2.2.0",
+  "description": "Vue 3, TypeScript, JavaScript, HTML, CSS & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
   "keywords": [
     "cursor-skills",
     "cursor-rules",
@@ -12,6 +12,10 @@
     "vue",
     "javascript-skills",
     "javascript",
+    "html-skills",
+    "html",
+    "css-skills",
+    "css",
     "vite-skills",
     "vite",
     "amp-skills",
@@ -45,7 +49,13 @@
     "skills:install": "node bin/install.js install --yes",
     "skills:list": "node bin/install.js list",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "openspec:list": "openspec list",
+    "openspec:validate": "openspec validate --all --strict",
+    "openspec:update": "openspec update --force",
+    "sync:agents": "./scripts/sync-local-agent-skills.sh",
+    "orchestrator:status": "npx agent-orchestrator-kit status",
+    "orchestrator:gate-check": "npx agent-orchestrator-kit gate-check"
   },
   "files": [
     "bin",
@@ -65,6 +75,7 @@
   },
   "homepage": "https://github.com/makshc2/vue-3-AI-skills#readme",
   "devDependencies": {
+    "@fission-ai/openspec": "^1.6.0",
     "vitest": "^3.2.6"
   }
 }

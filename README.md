@@ -69,6 +69,26 @@ Installs: `typescript-core`, `typescript-types`, `typescript-config`, `typescrip
 </details>
 
 <details>
+<summary><strong>HTML skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --category html
+```
+
+Installs: `html-core`, `html-forms`, `html-a11y`.
+</details>
+
+<details>
+<summary><strong>CSS skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --category css
+```
+
+Installs: `css-core`, `css-layout`, `css-responsive`, `css-animations`.
+</details>
+
+<details>
 <summary><strong>Amp Code skills</strong></summary>
 
 ```bash
@@ -144,6 +164,23 @@ npx frontend-agent-skills install --agent all
 | `typescript-testing` | Typed Vitest patterns: `vi.fn<T>`/`Mocked<T>` mocks, `expectTypeOf`/`assertType` type-testing, typed fixture factories, avoiding `any` in test doubles |
 | `typescript-debug` | Compiler error decoder: assignability (TS2345/TS2322/TS2769), nullability (TS18048), non-null assertion pitfalls, type widening, `any` vs `unknown`, structural typing surprises |
 
+### HTML
+
+| Skill | Description |
+|-------|-------------|
+| `html-core` | Semantic HTML, document structure/head metadata, media (`picture`, `srcset`, lazy loading), `dialog`/`details`, data attributes |
+| `html-forms` | Forms, input types, native validation, `autocomplete`, labels/fieldsets, FormData, submit patterns |
+| `html-a11y` | Accessibility: ARIA first rule, landmarks, headings, focus management, keyboard patterns, alt text, `prefers-*` |
+
+### CSS
+
+| Skill | Description |
+|-------|-------------|
+| `css-core` | Modern CSS: custom properties, nesting, `:is`/`:where`/`:has`, cascade layers, specificity, logical properties, units |
+| `css-layout` | Flexbox vs Grid, grid patterns, `subgrid`, container queries, intrinsic sizing |
+| `css-responsive` | Mobile-first strategy, fluid typography with `clamp()`, media vs container queries, `dvh` viewport units |
+| `css-animations` | Transitions, `@keyframes`, compositor-friendly motion, View Transitions, scroll-driven animations, `prefers-reduced-motion` |
+
 ---
 
 ## Installation
@@ -192,6 +229,8 @@ npx frontend-agent-skills install --agent all            # all supported agents
 ```bash
 npx frontend-agent-skills install --category vue
 npx frontend-agent-skills install --category javascript
+npx frontend-agent-skills install --category html
+npx frontend-agent-skills install --category css
 npx frontend-agent-skills install --skill vue-core --skill javascript-core --skill vite
 ```
 
@@ -340,6 +379,15 @@ Output:
       - typescript-testing
       - typescript-types
       - typescript-vue
+  📁 html/
+      - html-a11y
+      - html-core
+      - html-forms
+  📁 css/
+      - css-animations
+      - css-core
+      - css-layout
+      - css-responsive
 
   Supported agents: Cursor (cursor), Amp (amp), Claude Code (claude)
 ```
@@ -358,7 +406,9 @@ frontend-agent-skills/
     ├── vue/                    # Vue 3 skills
     ├── vite/                   # Vite build tool skill
     ├── javascript/             # JavaScript skills
-    └── typescript/             # TypeScript skills
+    ├── typescript/             # TypeScript skills
+    ├── html/                   # HTML skills
+    └── css/                    # CSS skills
 ```
 
 ---
@@ -398,6 +448,8 @@ The old package name `vue-cursor-skills` and CLI alias remain available temporar
 - [x] JavaScript — 7 skills: core, dom, debug, node, testing, performance, data
 - [x] Package rename — `frontend-agent-skills` v2.0.0
 - [x] TypeScript — 6 skills: core, types (advanced/utility), config, vue, testing, debug
+- [x] HTML — 3 skills: core, forms, a11y
+- [x] CSS — 4 skills: core, layout, responsive, animations
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others
 

@@ -63,7 +63,7 @@ const allSkills = discoverSkills()
 
 describe('skill frontmatter', () => {
   it('discovers at least javascript and typescript skills', () => {
-    expect(allSkills.length).toBeGreaterThanOrEqual(13)
+    expect(allSkills.length).toBeGreaterThanOrEqual(20)
   })
 
   it.each(allSkills.map((s) => [s.name, s.category, s.skillPath]))(
@@ -73,7 +73,12 @@ describe('skill frontmatter', () => {
       const fm = parseFrontmatter(content)
       expect(fm, `${name}: missing YAML frontmatter`).not.toBeNull()
       expect(fm.name, `${name}: missing name`).toBeTruthy()
-      if (category === 'javascript' || category === 'typescript') {
+      if (
+        category === 'javascript' ||
+        category === 'typescript' ||
+        category === 'html' ||
+        category === 'css'
+      ) {
         expect(fm.name, `${name}: name must match folder`).toBe(name)
       }
       expect(fm.description, `${name}: missing description`).toBeTruthy()
@@ -196,6 +201,87 @@ describe('installer', () => {
 
         for (const skill of expected) {
           const src = readFileSync(join(SKILLS_DIR, 'typescript', skill, 'SKILL.md'), 'utf8')
+          const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
+          expect(dst).toBe(src)
+        }
+      }
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
+  it('installs html category to all agents', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--category',
+        'html',
+        '--agent',
+        'all',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const agents = ['.cursor/skills', '.agents/skills', '.claude/skills']
+      const expected = [
+        'html-a11y',
+        'html-core',
+        'html-forms',
+      ]
+
+      for (const agentDir of agents) {
+        const installedDir = join(target, agentDir)
+        expect(existsSync(installedDir)).toBe(true)
+        const installed = readdirSync(installedDir).sort()
+        expect(installed).toEqual(expected)
+
+        for (const skill of expected) {
+          const src = readFileSync(join(SKILLS_DIR, 'html', skill, 'SKILL.md'), 'utf8')
+          const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
+          expect(dst).toBe(src)
+        }
+      }
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
+  it('installs css category to all agents', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--category',
+        'css',
+        '--agent',
+        'all',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const agents = ['.cursor/skills', '.agents/skills', '.claude/skills']
+      const expected = [
+        'css-animations',
+        'css-core',
+        'css-layout',
+        'css-responsive',
+      ]
+
+      for (const agentDir of agents) {
+        const installedDir = join(target, agentDir)
+        expect(existsSync(installedDir)).toBe(true)
+        const installed = readdirSync(installedDir).sort()
+        expect(installed).toEqual(expected)
+
+        for (const skill of expected) {
+          const src = readFileSync(join(SKILLS_DIR, 'css', skill, 'SKILL.md'), 'utf8')
           const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
           expect(dst).toBe(src)
         }

@@ -1,0 +1,52 @@
+schema: spec-driven
+
+context: |
+  Project: frontend-agent-skills (npm package, formerly vue-cursor-skills).
+  Purpose: curated AI agent skills (SKILL.md) for Vue 3, TypeScript, JavaScript, Vite.
+  Install targets: Cursor (.cursor/skills/), Amp (.agents/skills/), Claude Code (.claude/skills/).
+
+  Stack:
+  - Node.js ≥ 18, ESM (`"type": "module"`)
+  - CLI: bin/install.js (bin names: frontend-agent-skills, vue-cursor-skills)
+  - Tests: Vitest (`npm test`)
+  - No app src/ — product code lives in skills/ and bin/
+
+  Layout:
+  - skills/<category>/<skill-name>/SKILL.md[+ references/]
+  - Categories today: vue | typescript | javascript | vite
+  - vite is a top-level category skill (skills/vite/SKILL.md)
+
+  Agent language: Ukrainian (uk) for chat/explanations; SKILL.md content is English
+  (skills are published for international users).
+
+  Conventions when adding a skill:
+  - One skill = one folder under skills/<category>/<kebab-name>/
+  - Required: SKILL.md with YAML frontmatter (name, description, license: MIT)
+  - description MUST state when to load the skill (triggers)
+  - Prefer references/*.md for deep docs; keep SKILL.md actionable
+  - Update README.md install examples / category lists if public surface changes
+  - Add/adjust Vitest coverage in test/ when CLI discovery or install behavior changes
+  - Never put published product skills into .agents/skills/ (that folder is orchestration only)
+
+  OpenSpec domains for this repo:
+  - skill-catalog — catalog structure, categories, SKILL.md format
+  - install-cli — bin/install.js install/list behavior for agents
+  - packaging — npm package surface, files, versioning notes
+
+  Pipeline: explore → propose → review → apply → verify → archive
+  One active change at a time. No code edits in explore/review.
+
+rules:
+  proposal:
+    - Keep proposals under 500 words
+    - Always include Non-goals
+    - Name the category and skill folder path when adding/changing skills
+  design:
+    - Document SKILL.md frontmatter fields and reference file layout
+    - Call out README / test impact explicitly
+  tasks:
+    - Split CLI changes from skill content changes when both are needed
+    - Include `npm test` as a verification task
+  specs:
+    - Requirements MUST / SHOULD; scenarios as GIVEN/WHEN/THEN
+    - No implementation code inside specs

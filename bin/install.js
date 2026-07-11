@@ -43,7 +43,7 @@ Commands:
 
 Options:
   --target <dir>       Target project directory (default: cwd)
-  --category <name>    Install one category: vue | vite | javascript | typescript
+  --category <name>    Install one category: vue | vite | javascript | typescript | html | css
   --skill <name>       Install specific skill (can repeat)
   --agent <name>       Target agent: ${agentList} | all (can repeat)
                        If omitted, uses ${ENV_AGENT} env or prompts (default: cursor)
