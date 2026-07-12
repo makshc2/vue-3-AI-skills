@@ -63,7 +63,7 @@ const allSkills = discoverSkills()
 
 describe('skill frontmatter', () => {
   it('discovers at least javascript and typescript skills', () => {
-    expect(allSkills.length).toBeGreaterThanOrEqual(20)
+    expect(allSkills.length).toBeGreaterThanOrEqual(33)
   })
 
   it.each(allSkills.map((s) => [s.name, s.category, s.skillPath]))(
@@ -77,7 +77,8 @@ describe('skill frontmatter', () => {
         category === 'javascript' ||
         category === 'typescript' ||
         category === 'html' ||
-        category === 'css'
+        category === 'css' ||
+        category === 'design'
       ) {
         expect(fm.name, `${name}: name must match folder`).toBe(name)
       }
@@ -282,6 +283,46 @@ describe('installer', () => {
 
         for (const skill of expected) {
           const src = readFileSync(join(SKILLS_DIR, 'css', skill, 'SKILL.md'), 'utf8')
+          const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
+          expect(dst).toBe(src)
+        }
+      }
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
+  it('installs design category to all agents', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--category',
+        'design',
+        '--agent',
+        'all',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const agents = ['.cursor/skills', '.agents/skills', '.claude/skills']
+      const expected = [
+        'design-from-screenshot',
+        'design-transfer',
+        'figma-intake',
+      ]
+
+      for (const agentDir of agents) {
+        const installedDir = join(target, agentDir)
+        expect(existsSync(installedDir)).toBe(true)
+        const installed = readdirSync(installedDir).sort()
+        expect(installed).toEqual(expected)
+
+        for (const skill of expected) {
+          const src = readFileSync(join(SKILLS_DIR, 'design', skill, 'SKILL.md'), 'utf8')
           const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
           expect(dst).toBe(src)
         }

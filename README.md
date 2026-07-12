@@ -89,6 +89,16 @@ Installs: `css-core`, `css-layout`, `css-responsive`, `css-animations`.
 </details>
 
 <details>
+<summary><strong>Design skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --category design
+```
+
+Installs: `design-transfer`, `design-from-screenshot`, `figma-intake`.
+</details>
+
+<details>
 <summary><strong>Amp Code skills</strong></summary>
 
 ```bash
@@ -181,6 +191,14 @@ npx frontend-agent-skills install --agent all
 | `css-responsive` | Mobile-first strategy, fluid typography with `clamp()`, media vs container queries, `dvh` viewport units |
 | `css-animations` | Transitions, `@keyframes`, compositor-friendly motion, View Transitions, scroll-driven animations, `prefers-reduced-motion` |
 
+### Design
+
+| Skill | Description |
+|-------|-------------|
+| `design-transfer` | Source-agnostic design-to-code playbook: capture into a durable design brief, map tokens to CSS custom properties, implement and verify from brief + reference images only |
+| `design-from-screenshot` | Vision-only intake from screenshots/photos: layout hierarchy, 4/8px spacing scale, palette and type extraction with confidence markers |
+| `figma-intake` | One-pass Figma MCP capture (metadata → context → variables → screenshots) into the brief; graceful fallback to screenshot intake when access fails |
+
 ---
 
 ## Installation
@@ -231,6 +249,7 @@ npx frontend-agent-skills install --category vue
 npx frontend-agent-skills install --category javascript
 npx frontend-agent-skills install --category html
 npx frontend-agent-skills install --category css
+npx frontend-agent-skills install --category design
 npx frontend-agent-skills install --skill vue-core --skill javascript-core --skill vite
 ```
 
@@ -388,6 +407,10 @@ Output:
       - css-core
       - css-layout
       - css-responsive
+  📁 design/
+      - design-from-screenshot
+      - design-transfer
+      - figma-intake
 
   Supported agents: Cursor (cursor), Amp (amp), Claude Code (claude)
 ```
@@ -408,7 +431,8 @@ frontend-agent-skills/
     ├── javascript/             # JavaScript skills
     ├── typescript/             # TypeScript skills
     ├── html/                   # HTML skills
-    └── css/                    # CSS skills
+    ├── css/                    # CSS skills
+    └── design/                 # Design transfer skills
 ```
 
 ---
@@ -450,6 +474,7 @@ The old package name `vue-cursor-skills` and CLI alias remain available temporar
 - [x] TypeScript — 6 skills: core, types (advanced/utility), config, vue, testing, debug
 - [x] HTML — 3 skills: core, forms, a11y
 - [x] CSS — 4 skills: core, layout, responsive, animations
+- [x] Design — 3 skills: transfer, from-screenshot, figma-intake
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others
 

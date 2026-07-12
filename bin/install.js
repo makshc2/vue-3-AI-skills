@@ -31,7 +31,7 @@ const command = args[0] || 'install'
 function printUsage() {
   const agentList = AGENT_NAMES.join(' | ')
   console.log(`
-${PACKAGE_NAME} — AI agent skills for Vue 3, TypeScript, JavaScript, and Vite
+${PACKAGE_NAME} — AI agent skills for Vue 3, TypeScript, JavaScript, HTML, CSS, Design, and Vite
 
 Usage:
   npx ${PACKAGE_NAME} [command] [options]
@@ -43,7 +43,7 @@ Commands:
 
 Options:
   --target <dir>       Target project directory (default: cwd)
-  --category <name>    Install one category: vue | vite | javascript | typescript | html | css
+  --category <name>    Install one category: vue | vite | javascript | typescript | html | css | design
   --skill <name>       Install specific skill (can repeat)
   --agent <name>       Target agent: ${agentList} | all (can repeat)
                        If omitted, uses ${ENV_AGENT} env or prompts (default: cursor)

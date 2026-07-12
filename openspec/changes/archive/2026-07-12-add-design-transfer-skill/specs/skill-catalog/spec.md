@@ -1,10 +1,6 @@
-# skill-catalog Specification
+# skill-catalog Delta
 
-## Purpose
-
-Defines how published AI agent skills are structured, named, and documented in this package.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Category layout
 The package MUST organize published skills under `skills/<category>/`, where `<category>` is one of: `vue`, `typescript`, `javascript`, `vite`, `html`, `css`, `design`.
@@ -34,34 +30,6 @@ The package MUST organize published skills under `skills/<category>/`, where `<c
 - GIVEN the `design` category
 - WHEN the category is published
 - THEN `skills/design/design-transfer/SKILL.md`, `skills/design/design-from-screenshot/SKILL.md`, and `skills/design/figma-intake/SKILL.md` MUST exist
-
-### Requirement: SKILL.md frontmatter
-Every published skill MUST include YAML frontmatter with at least: `name`, `description`, `license`.
-
-#### Scenario: Required fields present
-- GIVEN a new or modified `SKILL.md`
-- WHEN the skill is packaged
-- THEN `name` MUST match the skill folder name
-- AND `description` MUST state when the agent should load the skill
-- AND `license` MUST be `MIT`
-
-### Requirement: Actionable skill body
-Skill bodies MUST give concrete preferences and rules an agent can follow; deep material SHOULD live in `references/`.
-
-#### Scenario: References for deep docs
-- GIVEN a skill with substantial reference material
-- WHEN the skill is authored
-- THEN detailed docs SHOULD be under `skills/<category>/<skill-name>/references/`
-- AND `SKILL.md` SHOULD link to those references
-
-### Requirement: Orchestration skills are separate
-Published product skills MUST NOT be stored in `.agents/skills/`; that directory is reserved for OpenSpec / agent-orchestrator kit skills.
-
-#### Scenario: Separation of concerns
-- GIVEN a new Vue/TS/JS/Vite skill for end users
-- WHEN it is added to the repo
-- THEN it MUST be placed under `skills/`
-- AND it MUST NOT be committed only under `.agents/skills/`
 
 ### Requirement: New category install coverage
 When a new category is added to the catalog, the installer test suite MUST verify that installing the category copies all of its skills to every supported agent directory.
@@ -98,6 +66,8 @@ The README MUST document every published category with a skills table and an ins
 - WHEN README.md is rendered
 - THEN it MUST include a Design skills table
 - AND it MUST include a `--category design` install example
+
+## ADDED Requirements
 
 ### Requirement: Design brief contract
 The `design-transfer` skill MUST define a durable design brief artifact as the single intake contract for all design sources, so implementation never depends on a live design-tool session.
