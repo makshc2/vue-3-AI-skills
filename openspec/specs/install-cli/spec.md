@@ -12,7 +12,14 @@ The CLI MUST copy selected skills into the target agent's skills directory.
 #### Scenario: Default install to Cursor
 - GIVEN the user runs `npx frontend-agent-skills install --yes`
 - WHEN install completes
-- THEN skills MUST be copied under `.cursor/skills/` in the target project
+- THEN the default token-light skill set MUST be copied under `.cursor/skills/` in the target project
+- AND the set MUST include `vue-core`, `vue-pinia`, `vue-axios`, `vue-router`, `vue-composables`, `vue-testing`, `typescript-vue`, `typescript-core`, and `vite`
+- AND it MUST NOT install the full catalog (`vueuse`, `javascript-core`, etc.) unless `--all`, `--category`, or `--skill` is passed
+
+#### Scenario: Full catalog install
+- GIVEN the user runs `npx frontend-agent-skills install --all --yes`
+- WHEN install completes
+- THEN every published skill under `skills/` MUST be copied into the target agent skills directory
 
 #### Scenario: Amp agent target
 - GIVEN `--agent amp`

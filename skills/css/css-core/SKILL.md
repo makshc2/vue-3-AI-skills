@@ -1,6 +1,6 @@
 ---
 name: css-core
-description: MUST be used for modern CSS foundations — custom properties, native nesting, :is/:where/:has, cascade layers, specificity, logical properties, and units. Load for any .css/.scss stylesheet work, component styles, design tokens, or when fixing cascade/specificity issues.
+description: Use for modern CSS foundations — custom properties, native nesting, :is/:where/:has, cascade layers, specificity, logical properties, and units. Load for stylesheet work, component styles, design tokens, or cascade/specificity issues.
 license: MIT
 metadata:
   sources:

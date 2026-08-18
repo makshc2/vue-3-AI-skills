@@ -1,6 +1,6 @@
 ---
 name: typescript-core
-description: MUST be used for TypeScript fundamentals — type annotations, interfaces vs type aliases, unions/intersections, narrowing, literal types, functions, classes, enums, and strict-mode discipline. Load for any .ts/.tsx file or when writing type-safe JavaScript. For advanced/utility/conditional types use typescript-types. For Vue-specific typing use typescript-vue.
+description: Use for TypeScript fundamentals — annotations, interfaces vs type aliases, unions, narrowing, functions, classes, enums, and strict-mode discipline. For utility/conditional types use typescript-types. For Vue SFC typing use typescript-vue.
 license: MIT
 metadata:
   sources:

@@ -23,6 +23,18 @@ const PACKAGE_NAME = 'frontend-agent-skills'
 const ENV_AGENT = 'FRONTEND_AGENT_SKILLS_AGENT'
 const LEGACY_ENV_AGENT = 'VUE_CURSOR_SKILLS_AGENT'
 
+const DEFAULT_SKILLS = [
+  'vue-core',
+  'vue-pinia',
+  'vue-axios',
+  'vue-router',
+  'vue-composables',
+  'vue-testing',
+  'typescript-vue',
+  'typescript-core',
+  'vite',
+]
+
 // ─── Args ────────────────────────────────────────────────────────────
 const args = process.argv.slice(2)
 const command = args[0] || 'install'
@@ -45,12 +57,17 @@ Options:
   --target <dir>       Target project directory (default: cwd)
   --category <name>    Install one category: vue | vite | javascript | typescript | html | css | design
   --skill <name>       Install specific skill (can repeat)
+  --all                Install every published skill (not the default)
   --agent <name>       Target agent: ${agentList} | all (can repeat)
                        If omitted, uses ${ENV_AGENT} env or prompts (default: cursor)
   --yes, -y            Skip agent prompt, use default agent (cursor)
 
+Default install (no --category / --skill / --all):
+  ${DEFAULT_SKILLS.join(', ')}
+
 Examples:
   npx ${PACKAGE_NAME} install
+  npx ${PACKAGE_NAME} install --all
   npx ${PACKAGE_NAME} install --agent cursor
   npx ${PACKAGE_NAME} install --agent amp
   npx ${PACKAGE_NAME} install --agent cursor --agent amp
@@ -193,9 +210,18 @@ function promptAgent(skipPrompt) {
 }
 
 // ─── Install ─────────────────────────────────────────────────────────
-function installSkills(targetDir, selectedCategories, selectedSkills, agents) {
+function installSkills(targetDir, selectedCategories, selectedSkills, agents, installAll) {
   const agentLabels = agents.map((a) => AGENTS[a].label).join(', ')
-  console.log(`\nInstalling skills for: ${agentLabels}\n`)
+  const useDefault = selectedCategories.length === 0 && selectedSkills.length === 0 && !installAll
+  const skillsFilter = useDefault ? [...DEFAULT_SKILLS] : selectedSkills
+
+  if (useDefault) {
+    console.log(`\nInstalling default (token-light) skill set for: ${agentLabels}`)
+    console.log(`  ${DEFAULT_SKILLS.join(', ')}`)
+    console.log('  Use --all or --category to install more.\n')
+  } else {
+    console.log(`\nInstalling skills for: ${agentLabels}\n`)
+  }
 
   let totalInstalled = 0
 
@@ -214,7 +240,7 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents) {
 
     for (const category of categoriesToProcess) {
       if (isTopLevelSkill(category)) {
-        if (selectedSkills.length > 0 && !selectedSkills.includes(category)) continue
+        if (skillsFilter.length > 0 && !skillsFilter.includes(category)) continue
 
         const src = join(SKILLS_DIR, category)
         const dest = join(destBase, category)
@@ -227,8 +253,8 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents) {
       const skills = getSkillsInCategory(category)
       if (skills.length === 0) continue
 
-      const toInstall = selectedSkills.length > 0
-        ? skills.filter((s) => selectedSkills.includes(s))
+      const toInstall = skillsFilter.length > 0
+        ? skills.filter((s) => skillsFilter.includes(s))
         : skills
 
       if (toInstall.length === 0) continue
@@ -263,7 +289,7 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents) {
 
 // ─── Arg parsing ─────────────────────────────────────────────────────
 function parseArgs(args) {
-  const options = { target: process.cwd(), categories: [], skills: [], agents: [], yes: false }
+  const options = { target: process.cwd(), categories: [], skills: [], agents: [], yes: false, all: false }
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--target' && args[i + 1]) {
       options.target = args[++i]
@@ -271,6 +297,8 @@ function parseArgs(args) {
       options.categories.push(args[++i])
     } else if (args[i] === '--skill' && args[i + 1]) {
       options.skills.push(args[++i])
+    } else if (args[i] === '--all') {
+      options.all = true
     } else if (args[i] === '--yes' || args[i] === '-y') {
       options.yes = true
     } else if (args[i] === '--agent' && args[i + 1]) {
@@ -303,7 +331,7 @@ async function main() {
       agents = await promptAgent(opts.yes)
     }
 
-    installSkills(opts.target, opts.categories, opts.skills, agents)
+    installSkills(opts.target, opts.categories, opts.skills, agents, opts.all)
   } else {
     console.error(`Unknown command: ${command}`)
     printUsage()

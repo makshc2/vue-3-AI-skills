@@ -1,6 +1,7 @@
 ---
 name: vueuse-functions
-description: Apply VueUse composables where appropriate to build concise, maintainable Vue.js / Nuxt features.
+description: VueUse composable catalog. Load only when the user asks for VueUse, @vueuse/*, or to replace custom code with a VueUse helper. Do not auto-load for ordinary Vue component work.
+disable-model-invocation: true
 license: MIT
 metadata:
     author: SerKo <https://github.com/serkodev>
@@ -14,9 +15,8 @@ This skill is a decision-and-implementation guide for VueUse composables in Vue.
 
 ## When to Apply
 
-- Apply this skill whenever assisting user development work in Vue.js / Nuxt.
-- Always check first whether a VueUse function can implement the requirement.
-- Prefer VueUse composables over custom code to improve readability, maintainability, and performance.
+- Load only when VueUse is explicitly needed (user request, existing `@vueuse/*` import, or replacing a known helper).
+- Prefer VueUse composables over custom code when this skill is loaded.
 - Map requirements to the most appropriate VueUse function and follow the function’s invocation rule.
 - Please refer to the `Invocation` field in the below functions table. For example:
   - `AUTO`: Use automatically when applicable.

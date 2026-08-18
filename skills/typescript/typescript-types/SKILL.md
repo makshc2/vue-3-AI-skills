@@ -1,6 +1,6 @@
 ---
 name: typescript-types
-description: MUST be used for advanced TypeScript type-level programming — built-in utility types (Partial, Pick, Omit, Record, ReturnType, Awaited, etc.), generics with constraints, mapped types, conditional types with infer, template literal types, and discriminated unions. Load when designing reusable types, generic APIs, or type-safe transformations rather than basic annotations (see typescript-core for fundamentals).
+description: Use for advanced TypeScript type-level programming — utility types (Partial, Pick, Omit, Record, ReturnType, Awaited), constrained generics, mapped/conditional types, template literals, and discriminated unions. Load when designing reusable types, not basic annotations.
 license: MIT
 metadata:
   sources:

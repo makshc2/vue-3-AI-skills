@@ -1,6 +1,6 @@
 ---
 name: html-forms
-description: MUST be used for HTML forms, input types, native validation, autocomplete, labels/fieldsets, FormData, and submit patterns without JS frameworks. Load when building or reviewing forms, auth fields, checkout, filters, or any markup with input/select/textarea/button.
+description: Use for HTML forms, input types, native validation, autocomplete, labels/fieldsets, FormData, and submit patterns. Load when building or reviewing forms, auth fields, checkout, or filters.
 license: MIT
 metadata:
   sources:

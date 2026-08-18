@@ -14,6 +14,10 @@
 npx frontend-agent-skills install
 ```
 
+Installs the **default (token-light)** Vue + TypeScript set into `.cursor/skills/` (or the agent you pick): `vue-core`, `vue-pinia`, `vue-axios`, `vue-router`, `vue-composables`, `vue-testing`, `typescript-vue`, `typescript-core`, `vite`.
+
+Heavy catalogs (`vueuse`, `vue-architecture`, `javascript-*`, `html-*`, `css-*`, `design-*`) stay out of the default. Add them with `--category` or `--all`.
+
 Curated **AI agent skills** for **Vue 3**, **TypeScript**, **JavaScript**, and **Vite** frontend development. Works with **Cursor IDE**, **Amp Code**, and **Claude Code** — the same skills, installed to `.cursor/skills/`, `.agents/skills/`, or `.claude/skills/`.
 
 Gives your AI agent deep knowledge of Vue 3 Composition API, TypeScript (generics, utility types, typed `<script setup>`), JavaScript ES2020+, Vite, Pinia, Vue Router, VueUse, Vitest, and more — so it writes idiomatic, production-ready code out of the box.
@@ -209,7 +213,7 @@ npx frontend-agent-skills install --agent all
 npx frontend-agent-skills install
 ```
 
-You will be prompted to choose your agent(s):
+This copies the **default skill set** (Vue + TypeScript + Vite, not every catalog). You will be prompted to choose your agent(s):
 
 ```
 ? Install skills for which agent(s)?
@@ -245,6 +249,7 @@ npx frontend-agent-skills install --agent all            # all supported agents
 #### Filter by category or specific skills
 
 ```bash
+npx frontend-agent-skills install --all
 npx frontend-agent-skills install --category vue
 npx frontend-agent-skills install --category javascript
 npx frontend-agent-skills install --category html

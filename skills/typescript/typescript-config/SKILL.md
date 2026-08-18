@@ -1,6 +1,6 @@
 ---
 name: typescript-config
-description: MUST be used when creating or editing tsconfig.json, choosing strict-mode flags, configuring module resolution/path aliases, setting up project references for monorepos, or authoring .d.ts declaration files. Load for tsconfig.json, jsconfig.json, env.d.ts, or any TypeScript project-setup task.
+description: Use when creating or editing tsconfig.json, choosing strict-mode flags, configuring module resolution/path aliases, project references, or authoring .d.ts files. Load for tsconfig.json, jsconfig.json, or env.d.ts.
 license: MIT
 metadata:
   sources:

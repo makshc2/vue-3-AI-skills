@@ -1,6 +1,6 @@
 ---
 name: css-animations
-description: MUST be used for CSS motion — transitions, @keyframes, compositor-friendly properties, View Transitions API, scroll-driven animations, and prefers-reduced-motion. Load when adding hover/focus motion, page transitions, scroll effects, or debugging janky animation performance.
+description: Use for CSS motion — transitions, @keyframes, compositor-friendly properties, View Transitions API, scroll-driven animations, and prefers-reduced-motion. Load when adding motion or debugging janky animation.
 license: MIT
 metadata:
   sources:

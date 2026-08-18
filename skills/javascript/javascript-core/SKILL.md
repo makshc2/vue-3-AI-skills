@@ -1,6 +1,6 @@
 ---
 name: javascript-core
-description: MUST be used for modern JavaScript (ES2020+) tasks. Enforces clarity over cleverness — variable declarations, naming conventions, ES modules, async/await and Promise APIs, immutable updates, functional array methods, and avoiding pitfalls (implicit coercion, nested ternaries, hidden side effects). Load for any .js or .mjs file, Node.js scripts, or plain JavaScript work that is not framework-specific.
+description: Use for modern JavaScript (ES2020+) — declarations, naming, ES modules, async/await, immutable updates, array methods, and language pitfalls. Load for plain JS or Node scripts that are not framework-specific.
 license: MIT
 metadata:
   sources:

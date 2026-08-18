@@ -1,6 +1,6 @@
 ---
 name: css-responsive
-description: MUST be used for responsive CSS strategy — mobile-first media queries, fluid typography with clamp(), media vs container queries, dvh viewport units, and coordinating responsive images. Load when adapting layouts across breakpoints, building fluid type scales, or fixing mobile viewport bugs.
+description: Use for responsive CSS — mobile-first media queries, fluid typography with clamp(), media vs container queries, dvh units, and responsive images. Load when adapting breakpoints or fixing mobile viewport bugs.
 license: MIT
 metadata:
   sources:

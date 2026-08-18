@@ -1,6 +1,6 @@
 ---
 name: html-a11y
-description: MUST be used for HTML accessibility — ARIA first rule, landmarks, headings, focus management, keyboard patterns, alt text, and prefers-* media hooks. Load when fixing a11y issues, auditing markup for WCAG, building dialogs/menus, or writing UI that must work with screen readers and keyboard only.
+description: Use for HTML accessibility — ARIA first rule, landmarks, headings, focus management, keyboard patterns, alt text, and prefers-* hooks. Load when fixing a11y issues, auditing WCAG, or building dialogs/menus.
 license: MIT
 metadata:
   sources:

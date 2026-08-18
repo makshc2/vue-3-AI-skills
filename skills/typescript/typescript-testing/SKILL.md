@@ -1,6 +1,6 @@
 ---
 name: typescript-testing
-description: MUST be used when writing Vitest tests in TypeScript — typing mocks (vi.fn<T>, Mocked<T>), type-only testing with expectTypeOf/assertType, typed test factories/fixtures, and avoiding `any` in test doubles. Load for *.test.ts / *.spec.ts files. For plain-JS Vitest conventions use javascript-testing; for Vue component testing use vue-testing.
+description: Use when writing Vitest tests in TypeScript — typing mocks (vi.fn<T>, Mocked<T>), expectTypeOf/assertType, typed fixtures, and avoiding `any` in test doubles. For plain-JS Vitest use javascript-testing; for Vue components use vue-testing.
 license: MIT
 metadata:
   sources:

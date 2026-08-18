@@ -13,6 +13,13 @@ metadata:
 Vue 3 debugging and error handling for runtime issues, warnings, async failures, and hydration bugs.
 For development best practices and common gotchas, use `vue-core`.
 
+## Token budget
+
+Treat this file as an **index**. Do **not** open every linked guide.
+1. Match the symptom to one bullet below.
+2. Open **only that** `reference/*.md` file (max 2 if the first miss).
+3. Stop reading after the fix is clear.
+
 ### Reactivity
 - Tracing unexpected re-renders and state updates → See [reactivity-debugging-hooks](reference/reactivity-debugging-hooks.md)
 - Ref values not updating due to missing .value access → See [ref-value-access](reference/ref-value-access.md)

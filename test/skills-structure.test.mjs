@@ -331,4 +331,64 @@ describe('installer', () => {
       rmSync(target, { recursive: true, force: true })
     }
   })
+
+  it('default install copies the token-light set only', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+    const expected = [
+      'typescript-core',
+      'typescript-vue',
+      'vite',
+      'vue-axios',
+      'vue-composables',
+      'vue-core',
+      'vue-pinia',
+      'vue-router',
+      'vue-testing',
+    ]
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--agent',
+        'cursor',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const installed = readdirSync(join(target, '.cursor/skills')).sort()
+      expect(installed).toEqual(expected)
+      expect(installed).not.toContain('vueuse')
+      expect(installed).not.toContain('vue-architecture')
+      expect(installed).not.toContain('javascript-core')
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
+  it('install --all copies more skills than the default set', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--all',
+        '--agent',
+        'cursor',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const installed = readdirSync(join(target, '.cursor/skills'))
+      expect(installed).toContain('vue-core')
+      expect(installed).toContain('vueuse')
+      expect(installed).toContain('javascript-core')
+      expect(installed.length).toBeGreaterThanOrEqual(33)
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
 })

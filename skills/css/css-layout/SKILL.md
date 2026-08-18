@@ -1,6 +1,6 @@
 ---
 name: css-layout
-description: MUST be used for CSS layout — Flexbox vs Grid decision rules, common grid patterns, subgrid, container queries, and intrinsic sizing (min, clamp, fit-content). Load when building page/component layouts, aligning items, responsive component shells, or choosing between flex and grid.
+description: Use for CSS layout — Flexbox vs Grid, common grid patterns, subgrid, container queries, and intrinsic sizing (min, clamp, fit-content). Load when building layouts, aligning items, or choosing between flex and grid.
 license: MIT
 metadata:
   sources:

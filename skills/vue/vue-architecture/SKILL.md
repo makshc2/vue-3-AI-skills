@@ -1,6 +1,7 @@
 ---
 name: vue-architecture
-description: "Enterprise-grade Vue 3 frontend architecture skill. Covers project structure, scalable patterns, component architecture, state management strategy, API layer design, routing, layouts, permissions, modals, forms, performance, DX tooling, naming conventions, and team standards. Use when bootstrapping a new Vue 3 project, designing application architecture, organizing large codebases, or enforcing engineering standards across teams."
+description: "Enterprise Vue 3 architecture — project structure, state/API strategy, routing, layouts, permissions, DX. Load only when bootstrapping a new app, redesigning folder structure, or setting team standards — not for ordinary component edits."
+disable-model-invocation: true
 license: MIT
 metadata:
   version: "1.0.0"

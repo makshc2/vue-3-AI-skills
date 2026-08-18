@@ -1,6 +1,6 @@
 ---
 name: typescript-vue
-description: MUST be used when typing Vue 3 <script setup lang="ts"> components — typed defineProps/defineEmits/defineModel, generic components, template refs, provide/inject with InjectionKey, typed composables, and typed Pinia stores. Load for any .vue file with lang="ts", or when adding/fixing TypeScript types in a Vue 3 component. For general Vue composition patterns use vue-core; for plain TypeScript fundamentals use typescript-core.
+description: Use when typing Vue 3 <script setup lang="ts"> — defineProps/defineEmits/defineModel, generic components, template refs, InjectionKey, typed composables and Pinia stores. For composition patterns use vue-core; for TS fundamentals use typescript-core.
 license: MIT
 metadata:
   sources:

@@ -35,15 +35,15 @@ metadata:
 
 Default stack: Vue 3 + Composition API + `<script setup lang="ts">`.
 
-### 1.1 Must-read references
+### 1.1 References (on demand)
 
-Before any Vue task, read and apply:
-- [`references/reactivity.md`](references/reactivity.md)
-- [`references/sfc.md`](references/sfc.md)
-- [`references/component-data-flow.md`](references/component-data-flow.md)
-- [`references/composables.md`](references/composables.md)
-- [`references/script-setup-macros.md`](references/script-setup-macros.md)
-- [`references/core-new-apis.md`](references/core-new-apis.md)
+Do **not** preload every file. Open at most 1–2 references that match the current task:
+- Reactivity / refs / computed / watch → [`references/reactivity.md`](references/reactivity.md)
+- SFC structure / style / script blocks → [`references/sfc.md`](references/sfc.md)
+- Props, emits, v-model, slots → [`references/component-data-flow.md`](references/component-data-flow.md)
+- Composable design → [`references/composables.md`](references/composables.md)
+- `defineProps` / macros → [`references/script-setup-macros.md`](references/script-setup-macros.md)
+- Newer Vue APIs → [`references/core-new-apis.md`](references/core-new-apis.md)
 
 ### 1.2 Plan component boundaries
 

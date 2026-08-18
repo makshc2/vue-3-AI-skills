@@ -1,6 +1,6 @@
 ---
 name: html-core
-description: MUST be used for semantic HTML markup and document structure. Covers landmark elements, head metadata, media (picture, srcset, lazy loading), dialog/details, and data attributes. Load for any .html file, template markup, SFC templates when choosing elements, or when replacing div-soup with semantic structure.
+description: Use for semantic HTML markup and document structure. Covers landmarks, head metadata, media (picture, srcset, lazy loading), dialog/details, and data attributes. Load when choosing elements or replacing div-soup.
 license: MIT
 metadata:
   sources:
