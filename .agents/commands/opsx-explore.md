@@ -5,9 +5,15 @@ category: Workflow
 description: "Enter explore mode - think through ideas, investigate problems, clarify requirements"
 ---
 
+## Session Start
+
+Follow the canonical Session Start protocol in `.agents/rules/session-handoff.mdc`, then announce the Explorer role.
+
 Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
-**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing.
+**IMPORTANT: Explore mode is read-only thinking, not implementation or artifact authoring.** You may discuss evidence returned by the specialist, but you must NEVER write code or OpenSpec artifacts. If the user asks you to implement or formalize the change, end explore with a handoff to a fresh propose session.
+
+**Conductor delegation is mandatory:** for any repository investigation, spawn `codebase-explorer` with a self-contained question and require its structured report. Do not search or trace the codebase in the parent session, and do not let the subagent write specs or code. The parent may synthesize the report and continue the exploratory conversation.
 
 **This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 
@@ -86,7 +92,7 @@ You have full context of the OpenSpec system. Use it naturally, don't force it.
 
 At the start, quickly check what exists:
 ```bash
-openspec list --json
+npx openspec list --json
 ```
 
 This tells you:
@@ -108,7 +114,7 @@ Think freely. When insights crystallize, you might offer:
 If the user mentions a change or you detect one is relevant:
 
 1. **Resolve and read existing artifacts for context**
-   - Run `openspec status --change "<name>" --json`.
+   - Run `npx openspec status --change "<name>" --json`.
    - Use `changeRoot`, `artifactPaths`, and `actionContext` from the status JSON.
    - Read existing files from `artifactPaths.<artifact>.existingOutputPaths`.
 
@@ -160,9 +166,13 @@ When things crystallize, you might offer a summary - but it's optional. Sometime
 
 ---
 
+## Session Exit (HARD STOP)
+
+Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. First line of the pasted prompt is `/opsx:design <name>` or `/opsx:propose <name>`. Do not start that phase in this chat.
+
 ## Guardrails
 
-- **Don't implement** - Never write code or implement features. Creating OpenSpec artifacts is fine, writing application code is not.
+- **Don't implement or author artifacts** - Never write code or OpenSpec files in explore.
 - **Don't fake understanding** - If something is unclear, dig deeper
 - **Don't rush** - Discovery is thinking time, not task time
 - **Don't force structure** - Let patterns emerge naturally

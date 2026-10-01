@@ -5,9 +5,17 @@ category: Workflow
 description: Implement tasks from an OpenSpec change (Experimental)
 ---
 
+## Session Start
+
+Follow the canonical Session Start protocol in `.agents/rules/session-handoff.mdc`, then announce the Implementer role.
+
 Implement tasks from an OpenSpec change.
 
 **Input**: Optionally specify a change name (e.g., `/opsx:apply add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
+
+**Parent-driven apply:** the parent reads `tasks.md` + `apply-notes.md` (open `design.md`/`proposal.md` only when a task explicitly references them or a contract field is incomplete) and writes code and tests itself, task by task, checking its own `tasks.md` checkboxes. Subagents are optional: spawn `code-writer`/`test-writer` for ≥ 2 independent tasks with no shared files (parallelization) or on explicit user request. `design-implementer` remains mandatory for tasks with a design-brief/Figma signal.
+
+**Escape valve (STOP — improvisation is forbidden):** if a task requires information beyond its Files/Do/Done-when + `apply-notes.md` + artifacts it explicitly references, STOP: record the gap in `handoff.md`, set the next command to `/opsx:propose <name>` (plan amendment), and end the session. Do not guess.
 
 **Steps**
 
@@ -16,26 +24,17 @@ Implement tasks from an OpenSpec change.
    If a name is provided, use it. Otherwise:
    - Infer from conversation context if the user mentioned a change
    - Auto-select if only one active change exists
-   - If ambiguous, run `openspec list --json` to get available changes and use the **AskUserQuestion tool** to let the user select
+   - If ambiguous, run `npx openspec list --json` to get available changes and use the **AskUserQuestion tool** to let the user select
 
    Always announce: "Using change: <name>" and how to override (e.g., `/opsx:apply <other>`).
 
 1.5. **Check review gate**
 
-   Read `.agents/orchestrator.yaml` → `pipeline.require_spec_review`.
-
-   If `true` (default for generic/vue3/node):
-   - Look for `openspec/changes/<name>/review.md` with `Verdict: APPROVE`
-   - OR explicit **APPROVE ✓** from `/opsx:review <name>` in this session (user pasted verdict)
-   - OR Memory MCP entity `Change:<name>` with `status: spec-approved`
-   - If none found → **STOP**. Tell user:
-     > "Spec review required. Run `/opsx:review <name>` in a separate read-only session, then start a new apply session after **Approve ✓`."
-
-   If `false` (mvp profile) or user confirms quick/demo mode → proceed.
+   Read `.agents/orchestrator.yaml` → `pipeline.require_spec_review`. If `true` (default for generic/vue3/node), require one of: `review.md` with `Verdict: APPROVE`, a pasted **APPROVE ✓** verdict from `/opsx:review <name>`, or Memory `Change:<name>` with `status: spec-approved`. If none found → **STOP** and tell the user to run `/opsx:review <name>` in a separate read-only session first. If `false` (mvp profile) or quick/demo mode is confirmed → proceed.
 
 2. **Check status to understand the schema**
    ```bash
-   openspec status --change "<name>" --json
+   npx openspec status --change "<name>" --json
    ```
    Parse the JSON to understand:
    - `schemaName`: The workflow being used (e.g., "spec-driven")
@@ -45,7 +44,7 @@ Implement tasks from an OpenSpec change.
 3. **Get apply instructions**
 
    ```bash
-   openspec instructions apply --change "<name>" --json
+   npx openspec instructions apply --change "<name>" --json
    ```
 
    This returns:
@@ -61,12 +60,9 @@ Implement tasks from an OpenSpec change.
 
    **Workspace guard:** If status JSON reports `actionContext.mode: "workspace-planning"` and `allowedEditRoots` is empty, explain that full workspace apply is not supported in this slice. Treat linked repos and folders as read-only context, ask the user to select an affected area through an explicit implementation workflow, and STOP before editing files.
 
-4. **Read context files**
+4. **Read the working set**
 
-   Read every file path listed under `contextFiles` from the apply instructions output.
-   The files depend on the schema being used:
-   - **spec-driven**: proposal, specs, design, tasks
-   - Other schemas: follow the contextFiles from CLI output
+   Read `tasks.md` and `apply-notes.md` — they are the primary input for apply. Open `design.md`, `proposal.md`, or delta specs only when a task explicitly references them or a contract field is incomplete. For non-spec-driven schemas, follow `contextFiles` from the CLI output.
 
 5. **Show current progress**
 
@@ -80,16 +76,12 @@ Implement tasks from an OpenSpec change.
 
    For each pending task:
    - Show which task is being worked on
-   - Make the code changes required
-   - Keep changes minimal and focused
-   - Mark task complete in the tasks file: `- [ ]` → `- [x]`
+   - Implement it in the parent session from its Files/Do/Done-when contract (subagent rules: see "Parent-driven apply" above)
+   - Verify the task's Done-when condition actually holds
+   - Mark the task complete in the tasks file: `- [ ]` → `- [x]`
    - Continue to next task
 
-   **Pause if:**
-   - Task is unclear → ask for clarification
-   - Implementation reveals a design issue → suggest updating artifacts
-   - Error or blocker encountered → report and wait for guidance
-   - User interrupts
+   **STOP if:** the escape valve triggers (see above), an error or blocker is encountered (report and wait), or the user interrupts.
 
 7. **On completion or pause, show status**
 
@@ -105,10 +97,6 @@ Implement tasks from an OpenSpec change.
 ## Implementing: <change-name> (schema: <schema-name>)
 
 Working on task 3/7: <task description>
-[...implementation happening...]
-✓ Task complete
-
-Working on task 4/7: <task description>
 [...implementation happening...]
 ✓ Task complete
 ```
@@ -150,15 +138,17 @@ All tasks complete! You can archive this change with `/opsx:archive`.
 What would you like to do?
 ```
 
+## Session Exit (HARD STOP)
+
+Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. Include task and build/lint status in Done. Never start archive in this apply chat.
+
 **Guardrails**
 - Keep going through tasks until done or blocked
-- Always read context files before starting (from the apply instructions output)
-- If task is ambiguous, pause and ask before implementing
-- If implementation reveals issues, pause and suggest artifact updates
-- Keep code changes minimal and scoped to each task
-- Update task checkbox immediately after completing each task
-- Pause on errors, blockers, or unclear requirements - don't guess
-- Use contextFiles from CLI output, don't assume specific file names
+- Always read `tasks.md` + `apply-notes.md` before starting
+- If a task contract is insufficient, STOP via the escape valve — don't guess or improvise
+- Keep code changes minimal and scoped to each task's `Files:` list
+- Never let a spawned specialist update `tasks.md`; the parent checks a box only after verifying Done-when
+- Pause on errors and blockers
 
 **Fluid Workflow Integration**
 

@@ -5,6 +5,10 @@ category: Workflow
 description: Propose a new change - create it and generate all artifacts in one step
 ---
 
+## Session Start
+
+Follow the canonical Session Start protocol in `.agents/rules/session-handoff.mdc`, then announce the Architect role.
+
 Propose a new change - create the change and generate all artifacts in one step.
 
 I'll create a change with artifacts:
@@ -18,6 +22,19 @@ When ready to implement, run /opsx:apply
 
 **Input**: The argument after `/opsx:propose` is the change name (kebab-case), OR a description of what the user wants to build.
 
+**Conductor delegation is mandatory:** spawn `spec-architect` with the resolved name, decision brief, design brief if present, and artifact instructions. The parent MUST NOT create or edit proposal/design/specs/tasks; after the structured report it may only verify files, run status, and run strict validation.
+
+**Task contract (mandatory tasks.md format):** every task must carry indented `Files:`, `Do:`, `Done-when:` fields:
+
+```markdown
+- [ ] 2.1 Short title
+  Files: src/router/index.js, new file: src/stores/auth.js
+  Do: concrete change in 1–3 lines — no vague wording ("as needed", "if necessary", "as appropriate")
+  Done-when: verifiable condition or command
+```
+
+Each task must be self-contained for a blind implementer — executable without reading design.md. `Files:` paths must exist unless prefixed with `new file:`. Lint: `npx agent-orchestrator-kit gate-check --tasks <name>` (mode via `pipeline.task_contract: warn|strict|off`).
+
 **Steps**
 
 1. **If no input provided, ask what they want to build**
@@ -29,22 +46,26 @@ When ready to implement, run /opsx:apply
 
    **IMPORTANT**: Do NOT proceed without understanding what the user wants to build.
 
-2. **Create the change directory**
+2. **Spawn the specialist**
+
+   Spawn `spec-architect` with a self-contained prompt and require `## Subagent report: spec-architect`. Delegate steps 3–5 to it; do not perform artifact creation in the parent session.
+
+3. **Create the change directory**
    ```bash
-   openspec new change "<name>"
+   npx openspec new change "<name>"
    ```
    This creates a scaffolded change in the planning home resolved by the CLI with `.openspec.yaml`.
 
-3. **Get the artifact build order**
+4. **Get the artifact build order**
    ```bash
-   openspec status --change "<name>" --json
+   npx openspec status --change "<name>" --json
    ```
    Parse the JSON to get:
    - `applyRequires`: array of artifact IDs needed before implementation (e.g., `["tasks"]`)
    - `artifacts`: list of all artifacts with their status and dependencies
    - `planningHome`, `changeRoot`, `artifactPaths`, and `actionContext`: path and scope context. Use these instead of assuming repo-local paths.
 
-4. **Create artifacts in sequence until apply-ready**
+5. **Create artifacts in sequence until apply-ready**
 
    Use the **TodoWrite tool** to track progress through the artifacts.
 
@@ -53,7 +74,7 @@ When ready to implement, run /opsx:apply
    a. **For each artifact that is `ready` (dependencies satisfied)**:
       - Get instructions:
         ```bash
-        openspec instructions <artifact-id> --change "<name>" --json
+        npx openspec instructions <artifact-id> --change "<name>" --json
         ```
       - The instructions JSON includes:
         - `context`: Project background (constraints for you - do NOT include in output)
@@ -68,7 +89,7 @@ When ready to implement, run /opsx:apply
       - Show brief progress: "Created <artifact-id>"
 
    b. **Continue until all `applyRequires` artifacts are complete**
-      - After creating each artifact, re-run `openspec status --change "<name>" --json`
+      - After creating each artifact, re-run `npx openspec status --change "<name>" --json`
       - Check if every artifact ID in `applyRequires` has `status: "done"` in the artifacts array
       - Stop when all `applyRequires` artifacts are done
 
@@ -76,9 +97,11 @@ When ready to implement, run /opsx:apply
       - Use **AskUserQuestion tool** to clarify
       - Then continue with creation
 
-5. **Show final status**
+6. **Verify the report and show final status**
+
+   The conductor verifies `Status: done` and each reported artifact path, then runs:
    ```bash
-   openspec status --change "<name>"
+   npx openspec status --change "<name>"
    ```
 
 **Output**
@@ -86,8 +109,12 @@ When ready to implement, run /opsx:apply
 After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions
-- What's ready: "All artifacts created! Ready for implementation."
-- Prompt: "Run `/opsx:apply` to start implementing."
+- What's ready: "All artifacts created and validated! Ready for spec review."
+- Prompt: "Run `/opsx:review <name>` in a fresh session."
+
+## Session Exit (HARD STOP)
+
+Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. First line of the pasted prompt is `/opsx:review <name>`. Do not start review in this chat.
 
 **Artifact Creation Guidelines**
 

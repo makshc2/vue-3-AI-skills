@@ -8,3 +8,6 @@ dist/
 .cursor
 .claude
 .amp
+.agents/figma.local.env
+.agents/github.local.env
+.agents/gitlab.local.env

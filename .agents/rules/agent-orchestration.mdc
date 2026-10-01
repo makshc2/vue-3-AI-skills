@@ -5,26 +5,30 @@ alwaysApply: true
 
 # Agent Orchestration Rules
 
-This project uses a spec-driven 5-role pipeline. Read `.agents/orchestrator.yaml` for config.
+Spec-driven pipeline. Read `.agents/orchestrator.yaml`. Details: skill `agent-orchestration`. Handoff: `.agents/rules/session-handoff.mdc`. CLI: `npx` only (`.agents/rules/cli-via-npm.mdc`).
 
-## Role Commands
-- `/opsx:explore` → read-only thinking, no code
-- `/opsx:propose <name>` → creates `openspec/changes/<name>/` artifacts only
-- `/opsx:review <name>` → read-only spec review, writes `review.md`, outputs Approve or Request Changes
-- `/opsx:apply <name>` → writes `src/`, marks `tasks.md [x]` (blocked if no review when `require_spec_review: true`)
-- `/opsx:quick <name>` → MVP: propose + apply in one session (when `require_spec_review: false`)
-- `/opsx:archive` → merges delta specs, moves change to archive
+## Commands
+`/opsx:explore` read-only · `/opsx:design <name>` brief+assets only · `/opsx:propose <name>` change artifacts · `/opsx:review <name>` review.md · `/opsx:apply <name>` code (blocked without Approve when `require_spec_review`) · `/opsx:quick <name>` MVP propose+apply · `/opsx:archive`
 
-## Session Rules
-- One active change at a time (unless mvp profile: up to 3)
-- Each role = new chat session (except `/opsx:quick` combines propose+apply)
-- No code in explore or review sessions
-- No apply without review when `pipeline.require_spec_review: true` — check `review.md` or Approve in context
-- After apply: build + lint before PR
-- After merge: run `/opsx:archive` (when `archive_after_merge: true`)
+The parent `/opsx:*` session is the **conductor**. Delegation is differentiated by phase: propose/review MUST spawn their specialist; apply is parent-driven with optional subagents; archive is a CLI call with phase subagents forbidden. Only the parent marks `tasks.md`. `spec-reviewer` ≠ `code-reviewer`.
 
-## Never
-- Mix propose and apply in one session
-- Edit `src/` during explore or review
-- Skip spec review before apply
-- Leave changes un-archived after merge
+| Phase / signal | Subagent | Status |
+|--------|------------|--------|
+| Status / gate / next command | `openspec-guide` | optional |
+| Restore/persist when handoff CLI failed | `session-handoff` | fallback only |
+| Broken kit / MCP / sync | `setup-doctor` | on signal |
+| `/opsx:explore` | `codebase-explorer` | mandatory |
+| `/opsx:design` | `design-intake` | mandatory |
+| `/opsx:propose` | `spec-architect` | mandatory |
+| `/opsx:review` (after `gate-check --review` passes) | `spec-reviewer` | mandatory |
+| Apply + design brief/Figma/image | `design-implementer` | mandatory on signal |
+| Apply: ≥ 2 independent tasks, no shared files, or explicit request | `code-writer` / `test-writer` | optional |
+| Apply pre-PR | `code-reviewer` | optional |
+| `/opsx:archive` | — use `npx agent-orchestrator-kit archive <name>` | CLI; subagent forbidden (`spec-archiver` = CLI-failure fallback only) |
+
+## Session
+Start: honor pasted `/opsx:*` → `npx agent-orchestrator-kit status` → `handoff --restore`. Spawn `session-handoff` restore **only if** restore CLI failed or printed no briefing (Amp: isolated `subagent-session-handoff`). Then spawn the phase specialist isolated. Free-form continue → `Handoff.next_command`.
+
+Exit HARD STOP: persist via `session-handoff` → `handoff.md` → `npx agent-orchestrator-kit handoff <name>` (exit 0) → paste CLI stdout as one fenced `/opsx:*` prompt. Do not start the next phase here.
+
+Never mix propose+apply (except `/opsx:quick`). No `src/` in explore/design/review. Skip live Figma during apply when a brief exists.
