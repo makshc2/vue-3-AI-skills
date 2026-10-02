@@ -54,6 +54,7 @@
     "skills:list": "node bin/install.js list",
     "test": "vitest run",
     "test:watch": "vitest",
+    "prepublishOnly": "npm test",
     "openspec:list": "openspec list",
     "openspec:validate": "openspec validate --all --strict",
     "openspec:update": "openspec update --force",

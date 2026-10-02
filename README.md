@@ -365,13 +365,15 @@ Use javascript-debug skill, why does this async loop not await?
 /vite configure proxy and path aliases for my Vue project
 ```
 
+> The `javascript-core` and `javascript-debug` prompts above need the JavaScript category, which the default install omits: run `npx frontend-agent-skills install --category javascript` first.
+
 Alternatively, add to your project's configuration:
 
 | Agent | File | Example |
 |-------|------|---------|
-| Cursor | `.cursor/rules/` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
-| Amp | `AGENTS.md` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
-| Claude Code | `CLAUDE.md` | `Always load vue-core, javascript-core, and vite skills for frontend work.` |
+| Cursor | `.cursor/rules/` | `For Vue component work load vue-core; for vite.config or build setup load vite; load other skills only when the task needs them` |
+| Amp | `AGENTS.md` | `For Vue component work load vue-core; for vite.config or build setup load vite; load other skills only when the task needs them` |
+| Claude Code | `CLAUDE.md` | `For Vue component work load vue-core; for vite.config or build setup load vite; load other skills only when the task needs them` |
 
 ---
 

@@ -36,7 +36,7 @@ describe('javascript-data patterns', () => {
     expect(copy.tags).toEqual(original.tags)
   })
 
-  it('Map groupBy pattern works', () => {
+  it.skipIf(typeof Object.groupBy !== 'function')('Map groupBy pattern works', () => {
     const orders = [{ status: 'new' }, { status: 'done' }, { status: 'new' }]
     const byStatus = Object.groupBy(orders, (o) => o.status)
     expect(byStatus.new).toHaveLength(2)

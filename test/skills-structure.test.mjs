@@ -66,22 +66,14 @@ describe('skill frontmatter', () => {
     expect(allSkills.length).toBeGreaterThanOrEqual(33)
   })
 
-  it.each(allSkills.map((s) => [s.name, s.category, s.skillPath]))(
+  it.each(allSkills.map((s) => [s.name, s.skillPath]))(
     '%s has valid frontmatter',
-    (name, category, skillPath) => {
+    (name, skillPath) => {
       const content = readFileSync(join(skillPath, 'SKILL.md'), 'utf8')
       const fm = parseFrontmatter(content)
       expect(fm, `${name}: missing YAML frontmatter`).not.toBeNull()
       expect(fm.name, `${name}: missing name`).toBeTruthy()
-      if (
-        category === 'javascript' ||
-        category === 'typescript' ||
-        category === 'html' ||
-        category === 'css' ||
-        category === 'design'
-      ) {
-        expect(fm.name, `${name}: name must match folder`).toBe(name)
-      }
+      expect(fm.name, `${name}: name must match folder`).toBe(name)
       expect(fm.description, `${name}: missing description`).toBeTruthy()
       expect(fm.description.length, `${name}: description too short`).toBeGreaterThan(40)
       expect(content.length, `${name}: SKILL.md too short`).toBeGreaterThan(400)
@@ -89,25 +81,8 @@ describe('skill frontmatter', () => {
   )
 })
 
-function hasLocalReferences(skillPath) {
-  return existsSync(join(skillPath, 'references')) || existsSync(join(skillPath, 'reference'))
-}
-
 describe('markdown internal links', () => {
-  const markdownFiles = walk(SKILLS_DIR).filter((filePath) => {
-    if (!filePath.endsWith('SKILL.md') && !filePath.includes('/references/') && !filePath.includes('/reference/')) {
-      return false
-    }
-    const skillRoot = filePath.includes('/skills/')
-      ? filePath.split('/skills/')[1].split('/').slice(0, 2).join('/')
-      : null
-    if (!skillRoot) return true
-    const [category, skill] = skillRoot.split('/')
-    const skillPath = skill
-      ? join(SKILLS_DIR, category, skill)
-      : join(SKILLS_DIR, category)
-    return hasLocalReferences(skillPath)
-  })
+  const markdownFiles = walk(SKILLS_DIR)
 
   it.each(markdownFiles.map((f) => [f.replace(`${ROOT}/`, ''), f]))(
     '%s links resolve',

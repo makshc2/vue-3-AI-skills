@@ -1,12 +1,12 @@
 ---
 name: javascript-node
-description: Node.js (>=18) best practices with ES modules. Covers node: built-in imports, fs/promises, path handling, process.env and configuration, CLI scripts, child processes, streams and pipeline, AbortController timeouts, graceful shutdown, error handling for unhandledRejection, and worker threads. Load when writing Node.js scripts, servers, CLI tools, build tooling, or anything running outside the browser.
+description: "Node.js (>=18) best practices with ES modules. Covers node: built-in imports, fs/promises, path handling, process.env and configuration, CLI scripts, child processes, streams and pipeline, AbortController timeouts, graceful shutdown, error handling for unhandledRejection, and worker threads. Load when writing Node.js scripts, servers, CLI tools, build tooling, or anything running outside the browser."
 license: MIT
 metadata:
   sources:
     - https://nodejs.org/docs/latest/api/ (Node.js official documentation)
   version: "1.0.0"
-compatibility: Node.js >=18, ESM ("type": "module")
+compatibility: 'Node.js >=18, ESM ("type": "module")'
 ---
 
 # Node.js — Best Practices

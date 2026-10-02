@@ -7,7 +7,7 @@ metadata:
     - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl (MDN Intl)
     - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date (MDN Date)
   version: "1.0.0"
-compatibility: ECMAScript 2020+ / Node.js >=18
+compatibility: ECMAScript 2020+ / Node.js >=18 (Object.groupBy needs Node 21+, toSorted Node 20+)
 ---
 
 # JavaScript Data — Dates, Intl, JSON, Regex, Collections

@@ -4,7 +4,7 @@ description: Use for modern JavaScript (ES2020+) — declarations, naming, ES mo
 license: MIT
 metadata:
   sources:
-    - https://mcpmarket.com/tools/skills/javascript-best-practices (JavaScript Best Practices skill)
+    - https://tc39.es/ecma262/ (ECMAScript language specification)
     - https://developer.mozilla.org/en-US/docs/Web/JavaScript (MDN reference)
   version: "1.0.0"
 compatibility: ECMAScript 2020+ / Node.js >=18
