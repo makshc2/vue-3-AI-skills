@@ -186,6 +186,51 @@ describe('installer', () => {
     }
   })
 
+  it('installs react category to all agents', () => {
+    const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
+
+    try {
+      execFileSync(process.execPath, [
+        join(ROOT, 'bin/install.js'),
+        'install',
+        '--category',
+        'react',
+        '--agent',
+        'all',
+        '--target',
+        target,
+        '--yes',
+      ], { stdio: 'pipe' })
+
+      const agents = ['.cursor/skills', '.agents/skills', '.claude/skills']
+      const expected = [
+        'react-core',
+        'react-data',
+        'react-debug',
+        'react-hooks',
+        'react-router',
+        'react-state',
+        'react-testing',
+        'react-typescript',
+      ]
+
+      for (const agentDir of agents) {
+        const installedDir = join(target, agentDir)
+        expect(existsSync(installedDir)).toBe(true)
+        const installed = readdirSync(installedDir).sort()
+        expect(installed).toEqual(expected)
+
+        for (const skill of expected) {
+          const src = readFileSync(join(SKILLS_DIR, 'react', skill, 'SKILL.md'), 'utf8')
+          const dst = readFileSync(join(installedDir, skill, 'SKILL.md'), 'utf8')
+          expect(dst).toBe(src)
+        }
+      }
+    } finally {
+      rmSync(target, { recursive: true, force: true })
+    }
+  })
+
   it('installs html category to all agents', () => {
     const target = mkdtempSync(join(tmpdir(), 'frontend-agent-skills-test-'))
 

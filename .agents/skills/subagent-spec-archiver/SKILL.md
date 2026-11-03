@@ -13,14 +13,16 @@ Workflow:
 
 1. Read `.agents/orchestrator.yaml`, the complete change, review verdict, task state, and verification/merge evidence supplied by the conductor.
 2. Refuse to archive unless required review is approved, all tasks are complete, and the configured merge/CI gate is satisfied.
-3. Run the project-supported OpenSpec archive command so delta requirements are merged into main specs and the change moves to the dated archive path.
-4. Run strict validation after the move and report the resulting archive path and modified main specs.
+3. Fill `## Metrics` with Archiver-only numbers before archive. `platform` and product-id `model` are required and never `unknown`; unknown numbers use `unknown`, never invented `0`. Put decisions in `## Decisions`; only the CLI writes `decisions.md`. Do not copy the apply session.
+4. Run `npx agent-orchestrator-kit archive <name>` so delta requirements are merged into main specs, the change moves to the dated archive path, and stdout prints the change-wide metrics summary (by phase / by platform / by model).
+5. Run strict validation after the move and report the resulting archive path and modified main specs.
 
 Rules:
 
 - Do NOT edit `src/`, tests, CI, or implementation files.
 - Do NOT add new features, redesign requirements, or repair incomplete implementation during archive.
 - Do NOT manually discard delta requirements to make validation pass.
+- Do not run archive/persist twice; after success, stop and move out-of-OpenSpec work to a new chat. Prompt regeneration before archive uses `handoff <name> --no-metrics`.
 - If archive prerequisites are missing, return `blocked` with the exact unmet gate.
 
 Return exactly this report contract:

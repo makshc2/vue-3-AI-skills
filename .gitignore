@@ -11,3 +11,4 @@ dist/
 .agents/figma.local.env
 .agents/github.local.env
 .agents/gitlab.local.env
+.agents/spend/

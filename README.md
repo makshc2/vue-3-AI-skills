@@ -123,6 +123,16 @@ Copies skills to `.claude/skills/` — use as slash commands or auto-loaded skil
 </details>
 
 <details>
+<summary><strong>React 19 skills for AI agents</strong></summary>
+
+```bash
+npx frontend-agent-skills install --agent cursor --category react
+```
+
+Installs 8 React skills: `react-core`, `react-hooks`, `react-typescript`, `react-state`, `react-router`, `react-data`, `react-testing`, `react-debug`.
+</details>
+
+<details>
 <summary><strong>Install all agents at once</strong></summary>
 
 ```bash
@@ -154,6 +164,21 @@ npx frontend-agent-skills install --agent all
 | Skill | Description |
 |-------|-------------|
 | `vite` | Vite config (`defineConfig`, env vars, proxy, aliases), plugin API (hooks, virtual modules, ordering), build (library mode, multi-page, chunking), SSR, Environment API (v6+), Rolldown migration (v8) |
+
+### React
+
+> React skills target a **Vite SPA** with **React 19** and the **React Compiler**. Next.js, RSC and SSR are out of scope.
+
+| Skill | Description |
+|-------|-------------|
+| `react-core` | Function components, props and defaults, `ref` as a prop, derived values, keys, context, forms with Actions, document metadata, StrictMode |
+| `react-hooks` | Rules of Hooks, "You Might Not Need an Effect", cleanup and races, `useRef`, `useTransition`, `useDeferredValue`, `use`, `useEffectEvent`, custom hooks, React Compiler memoization |
+| `react-typescript` | Props without `React.FC`, `ComponentProps` helpers, events, generic components, typed hooks and context, `jsx: "react-jsx"`, `@types/react` 19 changes |
+| `react-state` | Local and lifted state, Context + `useReducer`, `useSyncExternalStore`, neutral comparison of Zustand, Redux Toolkit and Jotai, state-shape pitfalls |
+| `react-router` | Neutral comparison of React Router, TanStack Router and Wouter; guards, lazy routes, search params, scroll restoration |
+| `react-data` | Server state in a SPA, fetch races and waterfalls, `AbortController`, `use` + Suspense, Error Boundaries, Actions and `useOptimistic`, TanStack Query vs SWR vs router loaders |
+| `react-testing` | Vitest + React Testing Library + `user-event`, role-based queries, `renderHook`, provider wrappers, MSW, Suspense and Error Boundary tests |
+| `react-debug` | "Too many re-renders", cross-component updates, infinite Effects, stale closures, hook order, `act` warnings, DevTools and Profiler, root error callbacks, compiler diagnostics |
 
 ### JavaScript
 
@@ -251,6 +276,7 @@ npx frontend-agent-skills install --agent all            # all supported agents
 ```bash
 npx frontend-agent-skills install --all
 npx frontend-agent-skills install --category vue
+npx frontend-agent-skills install --category react
 npx frontend-agent-skills install --category javascript
 npx frontend-agent-skills install --category html
 npx frontend-agent-skills install --category css
@@ -270,6 +296,45 @@ npx frontend-agent-skills install --agent all --skill vue-core --skill vite
 ```bash
 npx frontend-agent-skills install --target /path/to/my-project
 ```
+
+### Presets
+
+A preset is a named skill set from `bin/presets.json`.
+
+| Preset | Skills | Auto-detected by |
+|--------|--------|------------------|
+| `vue` *(default)* | vue-core, vue-pinia, vue-axios, vue-router, vue-composables, vue-testing, typescript-vue, typescript-core, vite | `vue` dependency (Vue 3 only) |
+| `typescript` | typescript-core, typescript-types, typescript-config, typescript-testing, typescript-debug | `typescript` dependency or `tsconfig.json` (fallback only) |
+| `javascript` | the 7 `javascript-*` skills | — |
+| `web` | html-core, html-forms, html-a11y, css-core, css-layout, css-responsive, css-animations | — |
+| `design` | design-transfer, design-from-screenshot, figma-intake | — |
+| `react` | react-core, react-hooks, react-typescript, react-state, react-router, react-data, react-testing, typescript-core, vite | `react` dependency |
+| `full` | every published skill | — |
+
+```bash
+npx frontend-agent-skills install --preset react
+npx frontend-agent-skills install --preset vue --preset web
+npx frontend-agent-skills install --preset auto     # detect the stack from package.json
+npx frontend-agent-skills install --preset full     # everything (token-heavy)
+```
+
+**Interactive menu.** Running `install` with no selector in a real terminal opens a preset menu with the detected stack preselected, followed by an agent picker. The menu appears only when stdin and stdout are a TTY, `CI` is unset, and none of `--yes`, `--all`, `--category`, `--skill`, `--preset` were passed. Esc or Ctrl+C cancels without writing anything. After the selection the CLI prints the equivalent non-interactive command, so you can put it in a script.
+
+**Selection rules.**
+
+- `install --yes` (or any non-TTY run) with no selectors installs the 9 default skills.
+- `--preset` combined with `--category` / `--skill` installs the **union** of both.
+- Without `--preset`, `--category` and `--skill` **intersect** (`--category vue --skill vue-core` installs only `vue-core`).
+- With `--preset`, `--all` wins and installs everything.
+- An unknown preset exits with code 1 and lists the available ones.
+
+**Token budget.** `--all` and `--preset full` print a warning: a large skill set costs context on every request, and some agents truncate the skill listing they show the model, so descriptions of individual skills may be cut off. Measurements per agent version are tracked in [`docs/improvement-roadmap.md`](docs/improvement-roadmap.md). Prefer a narrower preset unless you need everything.
+
+### Requirements
+
+Node.js **20.12** or newer is required to run the installer.
+
+Contributors need a higher Node version than users: the dev tooling (`vite`, `@fission-ai/openspec`) declares a higher `engines.node` floor in `package-lock.json` — check the highest lower bound there before opening a PR.
 
 ### Option 2: npm install as devDependency
 
@@ -418,6 +483,24 @@ Output:
       - design-from-screenshot
       - design-transfer
       - figma-intake
+  📁 react/
+      - react-core
+      - react-data
+      - react-debug
+      - react-hooks
+      - react-router
+      - react-state
+      - react-testing
+      - react-typescript
+
+  Presets:
+    - vue (9 skills) — Vue 3 (default, token-light) [default]
+    - typescript (5 skills) — TypeScript
+    - javascript (7 skills) — Modern JavaScript
+    - web (7 skills) — HTML & CSS
+    - design (3 skills) — Design handoff
+    - react (9 skills) — React (Vite SPA)
+    - full (41 skills) — Everything (token-heavy)
 
   Supported agents: Cursor (cursor), Amp (amp), Claude Code (claude)
 ```
@@ -434,6 +517,7 @@ frontend-agent-skills/
 │   └── install.js              # CLI installer (multi-agent)
 └── skills/
     ├── vue/                    # Vue 3 skills
+    ├── react/                  # React 19 skills
     ├── vite/                   # Vite build tool skill
     ├── javascript/             # JavaScript skills
     ├── typescript/             # TypeScript skills
@@ -482,6 +566,8 @@ The old package name `vue-cursor-skills` and CLI alias remain available temporar
 - [x] HTML — 3 skills: core, forms, a11y
 - [x] CSS — 4 skills: core, layout, responsive, animations
 - [x] Design — 3 skills: transfer, from-screenshot, figma-intake
+- [x] Install presets, interactive menu and stack auto-detection
+- [x] React — 8 skills: core, hooks, typescript, state, router, data, testing, debug
 - [ ] Vitest — advanced testing patterns
 - [ ] Additional agents — Windsurf, Cline, and others
 

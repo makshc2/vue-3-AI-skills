@@ -1,11 +1,16 @@
 {
   "name": "frontend-agent-skills",
   "version": "3.0.0",
-  "description": "Vue 3, TypeScript, JavaScript, HTML, CSS, Design & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
+  "description": "Vue 3, React, TypeScript, JavaScript, HTML, CSS, Design & Vite AI agent skills for Cursor IDE, Amp Code, and Claude Code — install curated SKILL.md rules with one CLI command.",
   "keywords": [
     "cursor-skills",
     "cursor-rules",
     "cursor-ide",
+    "react",
+    "react-skills",
+    "react19",
+    "react-compiler",
+    "presets",
     "vue3-skills",
     "vue-skills",
     "vue3",
@@ -69,7 +74,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20.12.0"
   },
   "repository": {
     "type": "git",
@@ -82,5 +87,8 @@
   "devDependencies": {
     "@fission-ai/openspec": "^1.6.0",
     "vitest": "^3.2.6"
+  },
+  "dependencies": {
+    "@clack/prompts": "1.8.1"
   }
 }

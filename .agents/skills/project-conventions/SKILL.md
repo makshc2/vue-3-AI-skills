@@ -16,19 +16,20 @@ description: Project conventions for frontend-agent-skills. Load when adding or 
 
 ## Adding a new published skill
 
-1. Choose category: `vue` | `typescript` | `javascript` | `vite` | `html` | `css` | `design`
+1. Choose category: `vue` | `typescript` | `javascript` | `vite` | `html` | `css` | `design` | `react`
 2. Create `skills/<category>/<kebab-name>/SKILL.md`
 3. Frontmatter: `name`, `description` (with load triggers), `license: MIT`
 4. Prefer `Use for…` over `MUST be used…` except for the primary `vue-core` skill
-5. Heavy catalogs (`vueuse`, `vue-architecture`) → `disable-model-invocation: true` and keep out of the default install set in `bin/install.js`
-6. Body: preferences + rules; put depth in `references/`; tell the agent to open only matching references
-7. If public surface changes — update `README.md`
-8. If CLI discovery / default set changes — update `test/` and run `npm test`
-9. Use OpenSpec change: `/opsx:propose add-<skill-name>` (or `extend-<category>`)
+5. Heavy catalogs (`vueuse`, `vue-architecture`) → `disable-model-invocation: true` and list it under `unlisted` in `bin/presets.json`
+6. Every new skill must be listed in at least one preset or under `unlisted` in `bin/presets.json` — otherwise `test/presets.test.mjs` fails
+7. Body: preferences + rules; put depth in `references/`; tell the agent to open only matching references
+8. If public surface changes — update `README.md`
+9. If CLI discovery / default set changes — update `test/` and run `npm test`
+10. Use OpenSpec change: `/opsx:propose add-<skill-name>` (or `extend-<category>`)
 
 ## Default install (token-light)
 
-`bin/install.js` without `--category` / `--skill` / `--all` installs only:
+`bin/install.js` without `--category` / `--skill` / `--preset` / `--all` installs the default preset — `vue` in `bin/presets.json` (not a constant in `bin/install.js`):
 `vue-core`, `vue-pinia`, `vue-axios`, `vue-router`, `vue-composables`, `vue-testing`, `typescript-vue`, `typescript-core`, `vite`.
 
 ## Language

@@ -5,6 +5,19 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createInterface } from 'node:readline'
 
+import {
+  getCategories,
+  getSkillsInCategory,
+  isTopLevelSkill,
+  listCatalogSkills,
+} from './lib/catalog.js'
+import { loadManifest, presetNames, resolvePreset } from './lib/presets.js'
+import { parseArgs } from './lib/args.js'
+import { readProjectDeps, detectPresets } from './lib/detect.js'
+import { resolveSelection, BUDGET_WARNING } from './lib/selection.js'
+import { shouldShowMenu, runMenu, formatEquivalentCommand } from './lib/menu.js'
+import { createPrompter } from './lib/prompter.js'
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 const SKILLS_DIR = join(ROOT, 'skills')
@@ -23,51 +36,59 @@ const PACKAGE_NAME = 'frontend-agent-skills'
 const ENV_AGENT = 'FRONTEND_AGENT_SKILLS_AGENT'
 const LEGACY_ENV_AGENT = 'VUE_CURSOR_SKILLS_AGENT'
 
-const DEFAULT_SKILLS = [
-  'vue-core',
-  'vue-pinia',
-  'vue-axios',
-  'vue-router',
-  'vue-composables',
-  'vue-testing',
-  'typescript-vue',
-  'typescript-core',
-  'vite',
-]
+const MANIFEST = loadManifest()
 
 // ─── Args ────────────────────────────────────────────────────────────
 const args = process.argv.slice(2)
 const command = args[0] || 'install'
 
 // ─── Helpers ─────────────────────────────────────────────────────────
+function catalogNames() {
+  return listCatalogSkills(SKILLS_DIR).map((s) => s.name)
+}
+
+function defaultSkills() {
+  return resolvePreset(MANIFEST, MANIFEST.default, catalogNames())
+}
+
+function presetSkillCount(name) {
+  return resolvePreset(MANIFEST, name, catalogNames()).length
+}
+
 function printUsage() {
   const agentList = AGENT_NAMES.join(' | ')
+  const categoryList = getCategories(SKILLS_DIR).join(' | ')
+  const presetList = presetNames(MANIFEST).join(' | ')
   console.log(`
-${PACKAGE_NAME} — AI agent skills for Vue 3, TypeScript, JavaScript, HTML, CSS, Design, and Vite
+${PACKAGE_NAME} — AI agent skills for Vue 3, React, TypeScript, JavaScript, HTML, CSS, Design, and Vite
 
 Usage:
   npx ${PACKAGE_NAME} [command] [options]
 
 Commands:
   install   Copy skills to the target agent directory (default)
-  list      List available categories and skills
+  list      List available categories, skills and presets
   help      Show this help
 
 Options:
   --target <dir>       Target project directory (default: cwd)
-  --category <name>    Install one category: vue | vite | javascript | typescript | html | css | design
+  --category <name>    Install one category: ${categoryList}
   --skill <name>       Install specific skill (can repeat)
+  --preset <name>      Install a preset: ${presetList} | auto (can repeat)
   --all                Install every published skill (not the default)
   --agent <name>       Target agent: ${agentList} | all (can repeat)
                        If omitted, uses ${ENV_AGENT} env or prompts (default: cursor)
   --yes, -y            Skip agent prompt, use default agent (cursor)
 
-Default install (no --category / --skill / --all):
-  ${DEFAULT_SKILLS.join(', ')}
+Default install (no --category / --skill / --preset / --all):
+  ${defaultSkills().join(', ')}
 
 Examples:
   npx ${PACKAGE_NAME} install
   npx ${PACKAGE_NAME} install --all
+  npx ${PACKAGE_NAME} install --preset react
+  npx ${PACKAGE_NAME} install --preset vue --preset web
+  npx ${PACKAGE_NAME} install --preset auto
   npx ${PACKAGE_NAME} install --agent cursor
   npx ${PACKAGE_NAME} install --agent amp
   npx ${PACKAGE_NAME} install --agent cursor --agent amp
@@ -93,34 +114,15 @@ function copyDir(src, dest) {
   }
 }
 
-function getCategories() {
-  return readdirSync(SKILLS_DIR).filter(
-    (entry) => statSync(join(SKILLS_DIR, entry)).isDirectory()
-  )
-}
-
-function getSkillsInCategory(category) {
-  const categoryDir = join(SKILLS_DIR, category)
-  if (!existsSync(categoryDir)) return []
-  return readdirSync(categoryDir).filter(
-    (entry) => statSync(join(categoryDir, entry)).isDirectory()
-  )
-}
-
-function isTopLevelSkill(category) {
-  const categoryDir = join(SKILLS_DIR, category)
-  return existsSync(join(categoryDir, 'SKILL.md'))
-}
-
 function listSkills() {
-  const categories = getCategories()
+  const categories = getCategories(SKILLS_DIR)
   console.log()
   for (const category of categories) {
-    if (isTopLevelSkill(category)) {
+    if (isTopLevelSkill(category, SKILLS_DIR)) {
       console.log(`  📦 ${category}`)
       continue
     }
-    const skills = getSkillsInCategory(category)
+    const skills = getSkillsInCategory(category, SKILLS_DIR)
     if (skills.length === 0) {
       console.log(`  📁 ${category}/  (empty — coming soon)`)
       continue
@@ -129,6 +131,14 @@ function listSkills() {
     for (const skill of skills) {
       console.log(`      - ${skill}`)
     }
+  }
+
+  console.log()
+  console.log('  Presets:')
+  for (const name of presetNames(MANIFEST)) {
+    const preset = MANIFEST.presets[name]
+    const suffix = name === MANIFEST.default ? ' [default]' : ''
+    console.log(`    - ${name} (${presetSkillCount(name)} skills) — ${preset.label}${suffix}`)
   }
 
   console.log()
@@ -210,15 +220,18 @@ function promptAgent(skipPrompt) {
 }
 
 // ─── Install ─────────────────────────────────────────────────────────
-function installSkills(targetDir, selectedCategories, selectedSkills, agents, installAll) {
+function installSkills(targetDir, selection, agents) {
   const agentLabels = agents.map((a) => AGENTS[a].label).join(', ')
-  const useDefault = selectedCategories.length === 0 && selectedSkills.length === 0 && !installAll
-  const skillsFilter = useDefault ? [...DEFAULT_SKILLS] : selectedSkills
+  const catalog = listCatalogSkills(SKILLS_DIR)
+  const selected = catalog.filter((s) => selection.skills.includes(s.name))
 
-  if (useDefault) {
+  if (selection.mode === 'default') {
     console.log(`\nInstalling default (token-light) skill set for: ${agentLabels}`)
-    console.log(`  ${DEFAULT_SKILLS.join(', ')}`)
-    console.log('  Use --all or --category to install more.\n')
+    console.log(`  ${selection.skills.join(', ')}`)
+    console.log('  Use --all, --preset or --category to install more.\n')
+  } else if (selection.presets.length > 0) {
+    console.log(`\nInstalling preset(s): ${selection.presets.join(', ')} (${selection.skills.length} skills)`)
+    console.log(`  for: ${agentLabels}\n`)
   } else {
     console.log(`\nInstalling skills for: ${agentLabels}\n`)
   }
@@ -232,40 +245,16 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents, in
 
     console.log(`  ${agentConfig.label} → ${agentConfig.dir}/`)
 
-    const categoriesToProcess = selectedCategories.length > 0
-      ? getCategories().filter((c) => selectedCategories.includes(c))
-      : getCategories()
-
     let agentInstalled = 0
 
-    for (const category of categoriesToProcess) {
-      if (isTopLevelSkill(category)) {
-        if (skillsFilter.length > 0 && !skillsFilter.includes(category)) continue
-
-        const src = join(SKILLS_DIR, category)
-        const dest = join(destBase, category)
-        copyDir(src, dest)
-        console.log(`    ✓ ${category}`)
-        agentInstalled++
-        continue
-      }
-
-      const skills = getSkillsInCategory(category)
-      if (skills.length === 0) continue
-
-      const toInstall = skillsFilter.length > 0
-        ? skills.filter((s) => skillsFilter.includes(s))
-        : skills
-
-      if (toInstall.length === 0) continue
-
-      for (const skill of toInstall) {
-        const src = join(SKILLS_DIR, category, skill)
-        const dest = join(destBase, skill)
-        copyDir(src, dest)
-        console.log(`    ✓ ${skill}`)
-        agentInstalled++
-      }
+    for (const entry of selected) {
+      const src = entry.name === entry.category
+        ? join(SKILLS_DIR, entry.category)
+        : join(SKILLS_DIR, entry.category, entry.name)
+      const dest = join(destBase, entry.name)
+      copyDir(src, dest)
+      console.log(`    ✓ ${entry.name}`)
+      agentInstalled++
     }
 
     totalInstalled += agentInstalled
@@ -282,38 +271,8 @@ function installSkills(targetDir, selectedCategories, selectedSkills, agents, in
     process.exit(1)
   }
 
-  const agentDirs = agents.map((a) => AGENTS[a].dir).join(', ')
   console.log(`Done! ${totalInstalled} skill(s) installed across ${agents.length} agent(s).`)
   console.log(`Restart your agent(s) to activate the skills.\n`)
-}
-
-// ─── Arg parsing ─────────────────────────────────────────────────────
-function parseArgs(args) {
-  const options = { target: process.cwd(), categories: [], skills: [], agents: [], yes: false, all: false }
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--target' && args[i + 1]) {
-      options.target = args[++i]
-    } else if (args[i] === '--category' && args[i + 1]) {
-      options.categories.push(args[++i])
-    } else if (args[i] === '--skill' && args[i + 1]) {
-      options.skills.push(args[++i])
-    } else if (args[i] === '--all') {
-      options.all = true
-    } else if (args[i] === '--yes' || args[i] === '-y') {
-      options.yes = true
-    } else if (args[i] === '--agent' && args[i + 1]) {
-      const val = args[++i].toLowerCase()
-      if (val === 'all') {
-        options.agents = [...AGENT_NAMES]
-      } else if (AGENTS[val]) {
-        if (!options.agents.includes(val)) options.agents.push(val)
-      } else {
-        console.error(`Unknown agent: "${val}". Available: ${AGENT_NAMES.join(', ')}, all`)
-        process.exit(1)
-      }
-    }
-  }
-  return options
 }
 
 // ─── Main ────────────────────────────────────────────────────────────
@@ -324,14 +283,79 @@ async function main() {
     printUsage()
   } else if (command === 'install' || !['list', 'help', '--help', '-h'].includes(command)) {
     const restArgs = command === 'install' ? args.slice(1) : args
-    const opts = parseArgs(restArgs)
+    const { options: opts, errors } = parseArgs(restArgs, AGENT_NAMES)
+
+    if (errors.length > 0) {
+      for (const error of errors) console.error(error)
+      process.exit(1)
+    }
+
+    const detect = () => detectPresets(MANIFEST, readProjectDeps(opts.target), {
+      fileExists: (file) => existsSync(join(opts.target, file)),
+    })
+
+    if (shouldShowMenu({
+      options: opts,
+      stdinIsTTY: !!process.stdin.isTTY,
+      stdoutIsTTY: !!process.stdout.isTTY,
+      env: process.env,
+    })) {
+      const detected = detect().presets.map((p) => p.name)
+      const prompter = await createPrompter()
+      const result = await runMenu({
+        prompter,
+        manifest: MANIFEST,
+        catalogNames: catalogNames(),
+        detected,
+        agentChoice: opts.agents.length > 0 ? opts.agents : resolveAgentsFromEnv(),
+        agentOptions: [...AGENT_NAMES],
+        defaultAgent: DEFAULT_AGENT,
+      })
+
+      if (result.cancelled) {
+        console.error('Cancelled.')
+        process.exit(130)
+      }
+
+      if (result.presets.includes('full')) console.error(BUDGET_WARNING)
+      console.log(`\n${result.skills.length} skill(s) selected.`)
+      console.log(formatEquivalentCommand({
+        presets: result.presets,
+        agents: result.agents,
+        target: opts.target,
+        cwd: process.cwd(),
+        packageName: PACKAGE_NAME,
+      }))
+
+      installSkills(opts.target, {
+        mode: 'explicit',
+        skills: result.skills,
+        presets: result.presets,
+      }, result.agents)
+      return
+    }
+
+    const selection = resolveSelection({
+      options: opts,
+      manifest: MANIFEST,
+      catalogSkills: listCatalogSkills(SKILLS_DIR),
+      detect,
+    })
+
+    if (selection.errors.length > 0) {
+      for (const error of selection.errors) console.error(error)
+      process.exit(1)
+    }
+
+    for (const warning of selection.warnings) console.error(warning)
+    for (const message of selection.messages) console.log(message)
 
     let agents = opts.agents
     if (agents.length === 0) {
       agents = await promptAgent(opts.yes)
     }
 
-    installSkills(opts.target, opts.categories, opts.skills, agents, opts.all)
+    installSkills(opts.target, selection, agents)
   } else {
     console.error(`Unknown command: ${command}`)
     printUsage()

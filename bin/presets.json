@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "default": "vue",
+  "presets": {
+    "vue": {
+      "label": "Vue 3 (default, token-light)",
+      "skills": [
+        "vue-core",
+        "vue-pinia",
+        "vue-axios",
+        "vue-router",
+        "vue-composables",
+        "vue-testing",
+        "typescript-vue",
+        "typescript-core",
+        "vite"
+      ],
+      "detect": {
+        "dependencies": [
+          "vue"
+        ]
+      }
+    },
+    "typescript": {
+      "label": "TypeScript",
+      "skills": [
+        "typescript-core",
+        "typescript-types",
+        "typescript-config",
+        "typescript-testing",
+        "typescript-debug"
+      ],
+      "detect": {
+        "dependencies": [
+          "typescript"
+        ],
+        "files": [
+          "tsconfig.json"
+        ],
+        "fallbackOnly": true
+      }
+    },
+    "javascript": {
+      "label": "Modern JavaScript",
+      "skills": [
+        "javascript-core",
+        "javascript-data",
+        "javascript-debug",
+        "javascript-dom",
+        "javascript-node",
+        "javascript-performance",
+        "javascript-testing"
+      ]
+    },
+    "web": {
+      "label": "HTML & CSS",
+      "skills": [
+        "html-core",
+        "html-forms",
+        "html-a11y",
+        "css-core",
+        "css-layout",
+        "css-responsive",
+        "css-animations"
+      ]
+    },
+    "design": {
+      "label": "Design handoff",
+      "skills": [
+        "design-transfer",
+        "design-from-screenshot",
+        "figma-intake"
+      ]
+    },
+    "react": {
+      "label": "React (Vite SPA)",
+      "skills": [
+        "react-core",
+        "react-hooks",
+        "react-typescript",
+        "react-state",
+        "react-router",
+        "react-data",
+        "react-testing",
+        "typescript-core",
+        "vite"
+      ],
+      "detect": {
+        "dependencies": [
+          "react"
+        ]
+      }
+    },
+    "full": {
+      "label": "Everything (token-heavy)",
+      "skills": "*"
+    }
+  },
+  "unlisted": {
+    "vueuse": "manual-only",
+    "vue-architecture": "manual-only",
+    "vue-debug": "on-demand",
+    "react-debug": "on-demand"
+  }
+}
