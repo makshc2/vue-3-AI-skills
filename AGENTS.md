@@ -1,6 +1,6 @@
 # Agent Orchestration — frontend-agent-skills
 
-> Powered by [agent-orchestrator-kit](https://github.com/makshc2/agent-orchestrator-kit) v0.1.8
+> Powered by [agent-orchestrator-kit](https://github.com/makshc2/agent-orchestrator-kit) v0.24.0
 
 This project uses a **spec-driven, role-separated AI pipeline** built on [OpenSpec](https://github.com/fission-ai/openspec).
 Every feature follows the same cycle regardless of stack or IDE.

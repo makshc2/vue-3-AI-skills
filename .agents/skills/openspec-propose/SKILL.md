@@ -22,9 +22,9 @@ When ready to implement, run /opsx:apply
 
 **Input**: The user's request should include a change name (kebab-case) OR a description of what they want to build.
 
-**Conductor delegation is mandatory:** spawn `spec-architect` with the resolved name, decision brief, design brief if present, and artifact instructions. The parent MUST NOT create or edit proposal/design/specs/tasks; after the structured report it may only verify paths, run status, run strict validation, run the Tier 1 pre-gate `npx agent-orchestrator-kit gate-check --review <name>`, and re-spawn `spec-architect` once with the gate-check errors.
+**Conductor delegation is mandatory:** spawn `spec-architect` with the resolved name, decision brief, design brief if present, and artifact instructions. The parent MUST NOT create or edit proposal/design/specs/tasks; after the structured report it may only verify paths, run status, run strict validation, run the Tier 1 pre-gate `npx agent-orchestrator-kit gate-check --review <name>`, and re-spawn `spec-architect` once with the gate-check errors. Only for fast-fix, the allowlist additionally permits reading `pipeline.review_fast_fix`, checking the accepted review with `--review-md`, asking for explicit approval, and the ONE shell-call verdict write/validation/rollback below.
 
-**Thin conductor (cost-lean protocol):** the parent MUST NOT research the repo — no grep/cat/sed over `bin/`, `src/`, specs, or other changes, before or after the spawn. It reads only the decision brief (by path), the kit `status`, and `handoff --restore`, plus `review.md` on a re-propose after Verdict REQUEST CHANGES (its path, verdict and Required Before Apply list go into the spawn prompt, per the re-propose rule below), and spawns `spec-architect` within at most 5 tool calls, passing the brief PATH (the user's description verbatim when no brief file exists) and the change name, never a digest of its own research. After the report the parent makes at most 3 tool calls (one shell call that runs `openspec status`, lists the reported artifact paths and runs `gate-check --review <name>`; then the session-exit persist) and, on a green gate, MUST NOT re-read the artifacts; a red gate adds only the one re-spawn and one more `gate-check --review`.
+**Thin conductor (cost-lean protocol):** the parent MUST NOT research the repo — no grep/cat/sed over `bin/`, `src/`, specs, or other changes, before or after the spawn. It reads only the decision brief (by path), the kit `status`, and `handoff --restore`, plus `review.md` on a re-propose after Verdict REQUEST CHANGES (its path, verdict and Required Before Apply list go into the spawn prompt, per the re-propose rule below), and spawns `spec-architect` within at most 5 tool calls, passing the brief PATH (the user's description verbatim when no brief file exists) and the change name, never a digest of its own research. After the report the parent makes at most 3 tool calls (one shell call that runs `openspec status`, lists the reported artifact paths and runs `gate-check --review <name>`; then the session-exit persist) and, on a green gate, MUST NOT re-read the artifacts; a red gate adds only the one re-spawn and one more `gate-check --review`. Only in fast-fix, extend the call budget by exactly those protocol steps: the config-key read and eligibility `--review-md` check, explicit approval request, and ONE shell call for verdict write/validation/rollback; no repo research or artifact re-reads are added.
 
 **Spec descriptions:** pass the 500-character requirement-description guidance in `.agents/rules/openspec-workflow.mdc` to `spec-architect`. The limit excludes headings and scenarios. Preserve existing MODIFIED behavior and scenarios; do not authorize an unrelated migration or truncation merely to make a gate green.
 
@@ -39,13 +39,25 @@ When ready to implement, run /opsx:apply
 
 Each task must be self-contained for a blind implementer — executable without reading design.md. `Files:` paths must exist unless prefixed with `new file:`. Lint: `npx agent-orchestrator-kit gate-check --tasks <name>` (mode via `pipeline.task_contract: warn|strict|off`).
 
-**Done-when quality:** Done-when checks that the new state is present, not only that the old state is gone. A quantitative `Done-when:` check (`grep -c`, "exactly N lines") must be consistent with the code or text that `Do:` of the same task prescribes. Do not hardcode volatile repo values (current version number, dates, "top entry"); describe them as the current value plus a rule evaluated at apply time.
+**Done-when quality:** Done-when checks that the new state is present, not only that the old state is gone. A quantitative `Done-when:` check (`grep -c`, "exactly N lines") must be consistent with the code or text that `Do:` of the same task prescribes. Do not hardcode volatile repo values (current version number, dates, "top entry"); describe them as the current value plus a rule evaluated at apply time. Prefer behavioral conditions (a test run or observable behavior); `grep` only for non-numeric presence/absence. "exactly N" counts are forbidden unless the task states why the exact count is guaranteed. Bad: `Do:` wraps all three `journalRows.value` assignments in `applyOverlay`, while `Done-when:` requires an empty `grep -v applyOverlay` and exactly two `applyOverlay` points. Good: `Done-when:` runs `node --test test/<file>` that asserts all three assignments.
+
+**Self-check:** after any edit of a task's `Do:`, re-read `Done-when:` of that task and of dependent tasks; verify every claim "X exists / is absent / is at line N" about code by reading the file and write its source `path:line` next to the claim; run every grep condition in `Done-when:` against current code and ensure the expected result is reachable.
+
+**Size hint:** more than 8 tasks or 4 or more delta specs → propose splitting into two changes under `**Risks:**`; do not block.
+
+**Fix changes:** when the change name starts with `fix-` or the brief describes a bug fix, the first implementation task adds a regression test that fails on the unfixed code, and its `Done-when:` names the test and states that it fails before the fix and passes after. When no automated test can reproduce the bug, `design.md` says why and the first task records the manual reproduction steps. This is guidance for the architect, not a lint.
 
 On re-propose after `review.md` Verdict REQUEST CHANGES, the conductor MUST pass `review.md` (path + verdict + Required Before Apply list) in the `spec-architect` spawn prompt and verify the report addresses every item; the parent MUST NOT itself edit proposal/design/specs/tasks. Exception: the structure-only propose trigger is the exact line
 
 **Source:** gate-check
 
 plus the absence of `## Checklist`; then fix only those gate-check errors.
+
+**Fast-fix lifecycle:** the conductor passes the fast-fix instruction only when (a) `.agents/orchestrator.yaml` has `pipeline.review_fast_fix: on` (the conductor may read that key), (b) `review.md` has Verdict REQUEST CHANGES, `gate-check --review-md <name>` exits 0, Checklist is present and it is NOT a Tier 1 record (`**Source:** gate-check` without `## Checklist`), and (c) Required Before Apply names 1-2 tasks. Pass the accepted review and these conditions in the spawn prompt; the architect decides whether design/delta changes make it ineligible.
+
+After the report, require the conductor's `gate-check --review <name>` exit 0 and `**Fast-fix:** eligible`, then ask the user for explicit approval. On approval, in ONE shell call: copy `review.md` to a temporary file, set the single `Verdict:` line to `APPROVE (fast-fix, approved by user)`, append `## Fast-fix` with the date of the write, repaired task ids, `gate-check --review exit 0` and “Tier 2 skipped, no independent check”, then run `gate-check --review-md <name>`; on exit ≠ 0 restore the copy. Keep the backup until validation succeeds or restoration completes. This is an accepted exception to “parent MUST NOT write the verdict”.
+
+Success: Output and Session Exit give next command `/opsx:apply <name>` in a fresh session and record `fast-fix` in handoff Decisions. Declined approval, `ineligible`, or a failed `--review-md` check: `review.md` stays REQUEST CHANGES unchanged (restore the copy on failure), and next command is `/opsx:review <name>` in a fresh session. A red `gate-check --review` after the one re-spawn keeps the existing `## Blocked` + `/opsx:propose <name>` path. When the key is off or missing nothing changes.
 
 **Steps**
 
@@ -60,56 +72,9 @@ plus the absence of `## Checklist`; then fix only those gate-check errors.
 
 2. **Spawn the specialist**
 
-   Spawn `spec-architect` with a self-contained prompt and require `## Subagent report: spec-architect`. Delegate steps 3–5 to it; do not perform artifact creation in the parent session.
+   Spawn `spec-architect` with a self-contained prompt and require `## Subagent report: spec-architect`. The specialist runs the artifact build loop from its own file (`spec-architect.md`); the parent does not create artifacts.
 
-3. **Create the change directory**
-   ```bash
-   npx openspec new change "<name>"
-   ```
-   This creates a scaffolded change in the planning home resolved by the CLI with `.openspec.yaml`.
-
-4. **Get the artifact build order**
-   ```bash
-   npx openspec status --change "<name>" --json
-   ```
-   Parse the JSON to get:
-   - `applyRequires`: array of artifact IDs needed before implementation (e.g., `["tasks"]`)
-   - `artifacts`: list of all artifacts with their status and dependencies
-   - `planningHome`, `changeRoot`, `artifactPaths`, and `actionContext`: path and scope context. Use these instead of assuming repo-local paths.
-
-5. **Create artifacts in sequence until apply-ready**
-
-   Use the **TodoWrite tool** to track progress through the artifacts.
-
-   Loop through artifacts in dependency order (artifacts with no pending dependencies first):
-
-   a. **For each artifact that is `ready` (dependencies satisfied)**:
-      - Get instructions:
-        ```bash
-        npx openspec instructions <artifact-id> --change "<name>" --json
-        ```
-      - The instructions JSON includes:
-        - `context`: Project background (constraints for you - do NOT include in output)
-        - `rules`: Artifact-specific rules (constraints for you - do NOT include in output)
-        - `template`: The structure to use for your output file
-        - `instruction`: Schema-specific guidance for this artifact type
-        - `resolvedOutputPath`: Resolved path or pattern to write the artifact
-        - `dependencies`: Completed artifacts to read for context
-      - Read any completed dependency files for context
-      - Create the artifact file using `template` as the structure and write it to `resolvedOutputPath`
-      - Apply `context` and `rules` as constraints - but do NOT copy them into the file
-      - Show brief progress: "Created <artifact-id>"
-
-   b. **Continue until all `applyRequires` artifacts are complete**
-      - After creating each artifact, re-run `npx openspec status --change "<name>" --json`
-      - Check if every artifact ID in `applyRequires` has `status: "done"` in the artifacts array
-      - Stop when all `applyRequires` artifacts are done
-
-   c. **If an artifact requires user input** (unclear context):
-      - Use **AskUserQuestion tool** to clarify
-      - Then continue with creation
-
-6. **Verify the report, run the Tier 1 pre-gate, and show final status**
+3. **Verify the report, run the Tier 1 pre-gate, and show final status**
 
    The conductor verifies `Status: done`, the `**Gate:**` line (informational only: whatever it says, including `not run` or nothing, the conductor's own run below decides), and each reported artifact path, then runs:
    ```bash
@@ -124,17 +89,11 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions
 - What's ready: "All artifacts created, validated, and Tier 1 pre-gate passed! Ready for spec review."
-- Prompt: "Run `/opsx:review <name>` in a fresh session." only after `gate-check --review` exit 0. If the pre-gate still fails after the one re-spawn, report `## Blocked` with the remaining gate-check errors and next command `/opsx:propose <name>` instead of this prompt and the What's ready line.
+- Prompt: by default "Run `/opsx:review <name>` in a fresh session." only after `gate-check --review` exit 0; only after successful fast-fix use "Run `/opsx:apply <name>` in a fresh session." and state that explicit approval skipped independent Tier 2 review. If the pre-gate still fails after the one re-spawn, report `## Blocked` with the remaining gate-check errors and next command `/opsx:propose <name>` instead of this prompt and the What's ready line.
 
-**Artifact Creation Guidelines**
+## Session Exit (HARD STOP)
 
-- Follow the `instruction` field from `openspec instructions` for each artifact type
-- The schema defines what each artifact should contain - follow it
-- Read dependency artifacts for context before creating new ones
-- Use `template` as the structure for your output file - fill in its sections
-- **IMPORTANT**: `context` and `rules` are constraints for YOU, not content for the file
-  - Do NOT copy `<context>`, `<rules>`, `<project_context>` blocks into the artifact
-  - These guide what you write, but should never appear in the output
+Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. By default the next command is `/opsx:review <name>` in a fresh session after `gate-check --review` exit 0. Only after successful fast-fix use `/opsx:apply <name>` and record `fast-fix` in handoff Decisions. Declined approval, ineligible, or failed `--review-md` uses `/opsx:review <name>` with the original RC unchanged. A red pre-gate after the one re-spawn uses `## Blocked` and `/opsx:propose <name>`. Do not start the next phase in this chat.
 
 **Guardrails**
 - Create ALL artifacts needed for implementation (as defined by schema's `apply.requires`)

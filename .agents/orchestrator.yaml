@@ -1,5 +1,5 @@
 version: 1
-kit_version: "0.1.8"
+kit_version: "0.24.0"
 
 project:
   name: "frontend-agent-skills"

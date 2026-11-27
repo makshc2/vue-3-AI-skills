@@ -15,6 +15,14 @@ Implement tasks from an OpenSpec change.
 
 **Parent-driven apply:** the parent reads `tasks.md` + `apply-notes.md` (open `design.md`/`proposal.md` only when a task explicitly references them or a contract field is incomplete) and writes code and tests itself, task by task, checking its own `tasks.md` checkboxes. Subagents are optional: spawn `code-writer`/`test-writer` for ≥ 2 independent tasks with no shared files (parallelization) or on explicit user request. `design-implementer` remains mandatory for tasks with a design-brief/Figma signal.
 
+<!-- aok-hooks:parent-delivery -->
+**Skill delivery (parent and writers):** after task selection, resolve the tech skills for the task's `Files:` (same lists as `code-writer`/`test-writer`).
+- Agent hooks disabled, or the native session id is unavailable → mandatory manual Read of every resolved skill path.
+- Agent hooks enabled → before implementing run `npx agent-orchestrator-kit hooks bind --change <name> --role implementer --task <id> --session <native-id>`. Take `<native-id>` from the `[aok-hooks] native session id:` line in the injected start context (authoritative); `hooks status --json` is advisory when several sessions share a worktree. Pass the printed single-use binding token in every child spawn prompt. Injected skill content counts only with a current same-context receipt (full contents, same session/agent, current digest); otherwise manually Read the path.
+- The platform has no context-capable event → manual Read fallback.
+Report `Skills:` immediately after `Status:` as read (paths), injected (paths), or missing (paths). Delivery never proves compliance.
+<!-- /aok-hooks:parent-delivery -->
+
 **Escape valve (STOP — improvisation is forbidden):** if a task requires information beyond its Files/Do/Done-when + `apply-notes.md` + artifacts it explicitly references, STOP: record the gap in `handoff.md`, set the next command to `/opsx:propose <name>` (plan amendment), and end the session. Do not guess.
 
 **Steps**
@@ -62,7 +70,7 @@ Implement tasks from an OpenSpec change.
 
 4. **Read the working set**
 
-   Read `tasks.md` and `apply-notes.md` — they are the primary input for apply. Open `design.md`, `proposal.md`, or delta specs only when a task explicitly references them or a contract field is incomplete. For non-spec-driven schemas, follow `contextFiles` from the CLI output.
+   Read `tasks.md` and `apply-notes.md` — they are the primary input for apply. Also read the `## Fix During Apply` section of `review.md` when present; fix those items during the tasks they touch. An item that cannot be fixed within Files/Do/Done-when goes to the Escape valve (STOP, next command `/opsx:propose <name>`). Open `design.md`, `proposal.md`, or delta specs only when a task explicitly references them or a contract field is incomplete. For non-spec-driven schemas, follow `contextFiles` from the CLI output.
 
 5. **Show current progress**
 
@@ -78,10 +86,22 @@ Implement tasks from an OpenSpec change.
    - Show which task is being worked on
    - Implement it in the parent session from its Files/Do/Done-when contract (subagent rules: see "Parent-driven apply" above)
    - Verify the task's Done-when condition actually holds
-   - Mark the task complete in the tasks file: `- [ ]` → `- [x]`
+   - Mark the task complete in the tasks file: `- [ ]` → `- [x]` (the last pending task only after step 6.5)
+   - After each ticked box, each important decision and each `code-reviewer` verdict, save progress with `npx agent-orchestrator-kit checkpoint <name> --task <id> --done "<what finished>" --next "<next step>"`; add `--blocked "<blocker>"` or `--decision "<topic>: <text>"` when they apply (a decision is kept in `checkpoint.json` only: also list it under `## Decisions` at Session Exit). A failed checkpoint is reported and never blocks the session.
    - Continue to next task
 
    **STOP if:** the escape valve triggers (see above), an error or blocker is encountered (report and wait), or the user interrupts.
+
+6.5. **Run the tests once (before the last box)**
+
+   When one task is left pending and its Done-when holds, do not tick it yet. Read `.agents/orchestrator.yaml` → `verifier.test_command` and run it once from the project root; show only the last 20 lines of its output and keep the exit code of the command itself (not of `tail`). A green run of the same command earlier in this session with no edit since counts, so do not run it twice.
+   - **Empty or missing command** (or no `orchestrator.yaml`): skip, warn "verifier.test_command is empty — tests not run", write `tests: skipped (no test_command)` in `## Done`, then tick the last box (its Done-when holds); `## Blocked` is not changed for it. Never guess a command such as `npm test`.
+   - **Resource limits** (a project rule or a busy machine): narrow the run — the specs of the changed files, or `--maxWorkers=1` — and write `tests: <passed>/<total> (narrowed: <what>)`; a green narrowed run ticks the last box. If nothing can run, write `tests: not run (<reason>)` in `## Done`, repeat the reason in `## Blocked`, leave the last box unticked and stop. Never skip a run without a record.
+   - **Red run** (exit ≠ 0): STOP and leave the last box unticked, with `tests: red (see Blocked)` in `## Done`. Fix it in this session when the cause is inside the tasks' `Files:` and run again; otherwise end through the escape valve (the failing command and its last lines in `## Blocked`, next command `/opsx:propose <name>`). A failure that already existed before this change (the same test fails on the unchanged code) needs an explicit user decision: name the test in `## Blocked` and wait. When the user accepts it, tick the last box, write `tests: 216/217 (accepted by user: <test name>)` in `## Done` and leave `## Blocked` empty for it; when the user does not accept it, the box stays unticked.
+   - **Green run** (exit 0): tick the last box and write `tests: <passed>/<total>` in `## Done` (`tests: green (exit 0)` when the output has no counts).
+   - **Session ends earlier** (more than one task still pending): write `tests: not run (paused: <k> tasks pending)` in `## Done`; this is not a blocker.
+   - **Opt-in hook evidence:** when installed policy configuration and an explicit session/change binding are in force, `hooks verify --change <name> --session <id>` may reuse a fresh evidence record instead of a second full run. A write never launches full verification by itself. The manual `verifier.test_command` path, the tests-line forms, and the narrow, skip, and user-acceptance rules above stay in force when hooks are off, observing, or not configured. The parent alone owns `tasks.md` checkboxes.
+   - **Semantic handoff:** after consciously reviewing the semantic prose, `hooks complete --change <name> --session <id> --confirm-handoff` records the completion intent. A later substantive outcome invalidates that receipt. An end event stays pending until asynchronous validation finishes and does not treat an earlier CLI snapshot as success. Claude has no parent Stop follow-up, so the manual CLI remains the fallback. Under enforced scope the parent's checkbox ticks and `handoff.md` writes are permitted by the narrow conductor progress allowance for the bound change only, and a `tasks.md` edit may change checkboxes only; a child cannot tick tasks or write `handoff.md`.
 
 7. **On completion or pause, show status**
 
@@ -140,7 +160,7 @@ What would you like to do?
 
 ## Session Exit (HARD STOP)
 
-Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. Include task and build/lint status in Done. Never start archive in this apply chat.
+Close via the canonical Session Exit protocol in `.agents/rules/session-handoff.mdc`. Include task, build/lint and test status in Done (the `tests:` line from step 6.5). Never start archive in this apply chat.
 
 **Green apply** (every task `[x]`, build/lint green): write `## Blocked` as `none`, `## Next command` as the literal line `npx agent-orchestrator-kit archive <name> --sync` and `## Next role` as `none`. `handoff <name>` then prints only that line instead of a prompt — paste it as the one fenced block; it is run in a terminal after the PR is merged, so no new chat is needed. Otherwise keep `/opsx:apply <name>` (tasks remain) or `/opsx:propose <name>` (escape valve — record the gap in `## Blocked`).
 
