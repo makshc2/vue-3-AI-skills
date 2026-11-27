@@ -1,6 +1,6 @@
 # frontend-agent-skills — Claude Code Context
 
-> agent-orchestrator-kit v0.1.8 | Spec-driven pipeline with OpenSpec
+> agent-orchestrator-kit v0.24.0 | Spec-driven pipeline with OpenSpec
 
 ## Project
 
